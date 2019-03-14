@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {Component} from 'react';
+import LoginForm from '../UIElements/Login/LoginForm';
+import RegisterForm from '../UIElements/Register/RegisterForm'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 
-const App = () => (
-  <div>
-    <h1>App</h1>
-  </div>
-);
+class App extends Component {
+  render() {
+    return(
+      <LoginForm />
+    )
+  }
+}
 
 export default App;
