@@ -1,11 +1,32 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from 'mdbreact';
+import {Redirect} from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 
-class FormPage extends Component {
-    redirectToHomePage = () => {
-        this.props.history.push("/");
+class RegisterForm extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {isRedirected: false};
+        this.redirectToHomePage = this.redirectToHomePage.bind(this);
     }
+
+    redirectToHomePage = () => {
+       this.setState({
+           isRedirected: true
+       });
+    }
+    
     render() {
+        let {isRedirected} = this.state;
+        
+        //if page is redirected to home..
+        if(isRedirected){
+            return(
+                <Redirect to={ROUTES.SIGN_IN}/>
+            );
+        }
+
         return (
             <MDBContainer>
                 <MDBRow className = "d-flex justify-content-center mt-5">
@@ -61,4 +82,4 @@ class FormPage extends Component {
     }
 }
 
-export default FormPage;
+export default RegisterForm;

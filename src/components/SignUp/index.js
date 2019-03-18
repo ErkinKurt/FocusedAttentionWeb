@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
+import RegisterForm from '../UIElements/Register/RegisterForm';
 
-const SignUp = () => (
-  <div>
-    <h1>SignUp</h1>
-  </div>
-);
+class SignUp extends Component{
+  render(){
+    return(
+      <RegisterForm/>
+    );
+  }
+}
 
 export default SignUp;

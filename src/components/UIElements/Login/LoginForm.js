@@ -1,11 +1,32 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import {Redirect} from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 
 class LoginForm extends Component {
-    redirectToRegister = () => {
-        this.props.history.push("/register");
+
+    constructor(props){
+        super(props);
+        this.state = {redirectFlag: false}
+        this.redirectToRegister = this.redirectToRegister.bind(this);
     }
+
+    redirectToRegister = () => {
+        this.setState({
+            redirectFlag: true
+        });
+    }
+
     render() {
+        let {redirectFlag} = this.state;
+
+        //If page is redirected to SignUp page.
+        if(redirectFlag){
+            return (
+                <Redirect to={ROUTES.SIGN_UP}/>
+            );
+        }
+
         return (  
         <MDBContainer>
             <MDBRow className = "d-flex justify-content-center mt-5">
