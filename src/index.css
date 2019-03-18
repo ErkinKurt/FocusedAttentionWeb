@@ -12,3 +12,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* I had to specifically create these navbar classes, because it brakes the datatable's page numbers */
+.navbar-ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+.navbar-li {
+  float: left;
+}
+
+.navbar-li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+.navbar-li a:hover {
+  background-color: #111;
+}
+
+/* To make pages responsive in a way*/
+.responsive {
+  max-width: 1048px;
+  margin: auto;
+}

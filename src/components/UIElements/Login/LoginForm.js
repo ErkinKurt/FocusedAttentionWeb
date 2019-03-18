@@ -53,8 +53,8 @@ class LoginForm extends Component {
                     />
                 </div>
                 <div className="text-center">
-                    <MDBBtn>Login</MDBBtn>
-                    <MDBBtn color="danger" onClick={this.redirectToRegister}>Register</MDBBtn>
+                    <MDBBtn color="primary">Login</MDBBtn>
+                    <MDBBtn color="success" onClick={this.redirectToRegister}>Register</MDBBtn>
                 </div>
                 </form>
             </MDBCol>

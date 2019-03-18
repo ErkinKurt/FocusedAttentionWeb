@@ -72,7 +72,7 @@ class RegisterForm extends Component {
                             </div>
                             <div className="text-center">
                             <MDBBtn color="success">Register</MDBBtn>
-                            <MDBBtn color="primary" onClick={this.redirectToHomePage}>Go Back</MDBBtn>
+                            <MDBBtn color="danger" onClick={this.redirectToHomePage}>Go Back</MDBBtn>
                             </div>
                         </form>
                     </MDBCol>

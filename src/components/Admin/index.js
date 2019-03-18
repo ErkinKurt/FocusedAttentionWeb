@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react'
+import AdminDashboard from '../UIElements/AdminDashboard/AdminDashboard';
 
-const Admin = () => (
-  <div>
-    <h1>Admin</h1>
-  </div>
-);
-
-export default Admin;
+export default class index extends Component {
+  render() {
+    return (
+      <div>
+        <AdminDashboard />
+      </div>
+    )
+  }
+}
