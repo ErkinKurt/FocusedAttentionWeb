@@ -538,6 +538,7 @@ const AdminDashboard = () => {
     <div className="responsive">
         <h2>Welcome Admin</h2>
         <h4>Here is the list of Doctors</h4>
+        <hr/>
         <MDBDataTable
             striped
             bordered

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
+import { MDBCol, MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
 import { Bar, Pie } from 'react-chartjs-2';
 
 class DoctorDashboard extends Component {
@@ -60,61 +60,78 @@ class DoctorDashboard extends Component {
             ]
         }
         return (
-            <MDBRow className="mb-4">
-                <MDBCol md="8"className="mb-4">
-                    <MDBCard className="mb-4">
-                        <MDBCardBody>
-                            <Bar data={dataBar} height={500} options={barChartOptions} />
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
-                <MDBCol md="4" className="mb-4">
-                    <MDBCard className="mb-4">
-                        <MDBCardHeader>Pie chart</MDBCardHeader>
-                        <MDBCardBody>
-                            <Pie data={dataPie} height={300} options={{responsive: true}} />
-                        </MDBCardBody>
-                    </MDBCard>
-                    <MDBCard className="mb-4">
-                        <MDBCardBody>
-                            <MDBListGroup className="list-group-flush">
-                                <MDBListGroupItem>
-                                    Sales
-                                    <MDBBadge color="success-color" pill className="float-right">
-                                        22%
-                                        <MDBIcon icon="arrow-up" className="ml-1"/>
-                                    </MDBBadge>
-                                </MDBListGroupItem>
-                                <MDBListGroupItem>
-                                    Traffic
-                                    <MDBBadge color="danger-color" pill className="float-right">
-                                        5%
-                                        <MDBIcon icon="arrow-down" className="ml-1"/>
-                                    </MDBBadge>
-                                </MDBListGroupItem>
-                                <MDBListGroupItem>
-                                    Orders
-                                    <MDBBadge color="primary-color" pill className="float-right">
-                                        14
-                                    </MDBBadge>
-                                </MDBListGroupItem>
-                                <MDBListGroupItem>
-                                    Issues
-                                    <MDBBadge color="primary-color" pill className="float-right">
-                                        123
-                                    </MDBBadge>
-                                </MDBListGroupItem>
-                                <MDBListGroupItem>
-                                    Messages
-                                    <MDBBadge color="primary-color" pill className="float-right">
-                                        8
-                                    </MDBBadge>
-                                </MDBListGroupItem>
-                            </MDBListGroup>
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBCol>
-            </MDBRow>
+            <div className = "responsive" >
+                <h2>Welcome Doctor</h2>
+                {/* Redirect to create patient form*/}
+                <MDBBtn color="elegant">Create Patient</MDBBtn>
+                {/* Redirect to datatable, in datatable, edit patient and show patient's results
+                Maybe it can be unnecessary we can show it at the beginning, when the page opens */}
+                <MDBBtn color="elegant">Show Patients</MDBBtn>
+                {/* Redirect to get report form, in which user will select either in time 
+                based or scenario based reports */}
+                <MDBBtn color="elegant">Get Report</MDBBtn>
+                {/* Send an email to himself/herself of some specific reports */}
+                <MDBBtn color="elegant">Email Report</MDBBtn> 
+                {/* Adjustment of test difficulties for current scenario */}
+                <MDBBtn color="elegant">Adjustments for Test</MDBBtn> 
+                <hr />
+                {/* Tables */}
+                <MDBRow className="mb-4">
+                    <MDBCol md="8" className="mb-4">
+                        <MDBCard className="mb-4">
+                            <MDBCardBody>
+                                <Bar data={dataBar} height={500} options={barChartOptions} />
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBCol>
+                    <MDBCol md="4" className="mb-4">
+                        <MDBCard className="mb-4">
+                            <MDBCardHeader>Pie chart</MDBCardHeader>
+                            <MDBCardBody>
+                                <Pie data={dataPie} height={300} options={{responsive: true}} />
+                            </MDBCardBody>
+                        </MDBCard>
+                        <MDBCard className="mb-4">
+                            <MDBCardBody>
+                                <MDBListGroup className="list-group-flush">
+                                    <MDBListGroupItem>
+                                        Sales
+                                        <MDBBadge color="success-color" pill className="float-right">
+                                            22%
+                                            <MDBIcon icon="arrow-up" className="ml-1"/>
+                                        </MDBBadge>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem>
+                                        Traffic
+                                        <MDBBadge color="danger-color" pill className="float-right">
+                                            5%
+                                            <MDBIcon icon="arrow-down" className="ml-1"/>
+                                        </MDBBadge>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem>
+                                        Orders
+                                        <MDBBadge color="primary-color" pill className="float-right">
+                                            14
+                                        </MDBBadge>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem>
+                                        Issues
+                                        <MDBBadge color="primary-color" pill className="float-right">
+                                            123
+                                        </MDBBadge>
+                                    </MDBListGroupItem>
+                                    <MDBListGroupItem>
+                                        Messages
+                                        <MDBBadge color="primary-color" pill className="float-right">
+                                            8
+                                        </MDBBadge>
+                                    </MDBListGroupItem>
+                                </MDBListGroup>
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBCol>
+                </MDBRow>
+            </div>
         )
     }
 }
