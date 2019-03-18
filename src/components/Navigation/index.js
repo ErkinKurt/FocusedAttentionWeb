@@ -28,6 +28,9 @@ class Navigation extends Component {
           <li className="navbar-li">
             <Link to={ROUTES.DOCTOR}>Doctor</Link>
           </li>
+          <li className="navbar-li">
+            <Link to={ROUTES.PATIENT}>Patient</Link>
+          </li>
         </ul>
       </div>
     );
