@@ -11,7 +11,6 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import DoctorPage from '../Doctor';
 import PatientPage from '../Patient';
-import Firebase from '../Firebase';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';

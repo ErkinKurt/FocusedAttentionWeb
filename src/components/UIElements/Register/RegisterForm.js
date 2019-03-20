@@ -27,7 +27,7 @@ class RegisterForm extends Component {
     };
 
     onSubmit(event) {
-        let { username, email, passwordOne } = this.state;
+        let {email, passwordOne } = this.state;
 
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -106,7 +106,6 @@ class RegisterForm extends Component {
                                     name='passwordTwo'
                                     icon="exclamation-triangle"
                                     group
-                                    type="text"
                                     validate
                                     type="password"
                                     error="wrong"
