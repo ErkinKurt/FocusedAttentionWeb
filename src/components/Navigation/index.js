@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import {Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
+import {FirebaseContext} from '../Firebase';
+import {SignOut} from '../SignOut';
 
 class Navigation extends Component {
   render() {
@@ -19,7 +21,7 @@ class Navigation extends Component {
           <li className="navbar-li">
             <Link to={ROUTES.LANDING}>Landing</Link>
           </li>
-          <li className="navbar-li"> 
+          <li className="navbar-li">
             <Link to={ROUTES.ACCOUNT}>Account</Link>
           </li>
           <li className="navbar-li">
@@ -30,6 +32,11 @@ class Navigation extends Component {
           </li>
           <li className="navbar-li">
             <Link to={ROUTES.PATIENT}>Patient</Link>
+          </li>
+          <li>
+            <FirebaseContext.Consumer>
+              {firebase => <SignOut firebase={firebase}/>}
+            </FirebaseContext.Consumer>
           </li>
         </ul>
       </div>

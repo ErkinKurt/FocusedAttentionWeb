@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
+import {MDBBtn} from 'mdbreact';
 
-const SignOut = () => (
-  <div>
-    <h1>SignOut</h1>
-  </div>
-);
+export class SignOut extends Component{
+  render(){
+    return(
+      <MDBBtn color="danger" onClick={this.props.firebase.doSignOut}>SignOut</MDBBtn>
+    );
+  }
+}
 
 export default SignOut;
