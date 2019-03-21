@@ -1,4 +1,6 @@
 import React from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 import { MDBDataTable, MDBIcon, MDBBtn } from 'mdbreact';
 
 // PC Ekle Butonu ve arayüzü
@@ -543,6 +545,10 @@ const AdminDashboard = () => {
         <h2>Welcome Admin</h2>
         <h4>Here is the list of Doctors</h4>
         <hr/>
+        {/* For admins to create pcs to recognize differences between them */}
+        <MDBBtn color="elegant">Create a PC</MDBBtn>
+        <MDBBtn color="elegant" onClick={() => <Redirect to={ROUTES.CREATEDOCTOR} />}>Create a Doctor</MDBBtn>
+        <hr />
         <MDBDataTable
             striped
             bordered
@@ -554,4 +560,4 @@ const AdminDashboard = () => {
       );
 }
 
-export default AdminDashboard;
+export default withRouter(AdminDashboard);

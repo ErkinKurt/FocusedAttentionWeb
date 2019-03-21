@@ -7,3 +7,4 @@ export const ADMIN = '/admin';
 export const PASSWORD_FORGET = '/pw-forget';
 export const DOCTOR = '/doctor';
 export const PATIENT = '/patient';
+export const CREATEDOCTOR = '/admin/createdoctor';

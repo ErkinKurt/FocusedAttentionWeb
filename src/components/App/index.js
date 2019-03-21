@@ -11,6 +11,7 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import DoctorPage from '../Doctor';
 import PatientPage from '../Patient';
+import CreateDoctorPage from '../CreateDoctor';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
@@ -32,6 +33,7 @@ class App extends Component {
           <Route path={ROUTES.ADMIN} component={AdminPage}/>
           <Route path={ROUTES.DOCTOR} component={DoctorPage}/>
           <Route path={ROUTES.PATIENT} component={PatientPage}/>
+          <Route path={ROUTES.CREATEDOCTOR} component={CreateDoctorPage}/>
           
         </div>
       </Router>

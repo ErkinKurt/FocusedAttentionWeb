@@ -33,7 +33,7 @@ class Navigation extends Component {
           <li className="navbar-li">
             <Link to={ROUTES.PATIENT}>Patient</Link>
           </li>
-          <li>
+          <li className="navbar-li">
             <FirebaseContext.Consumer>
               {firebase => <SignOut firebase={firebase}/>}
             </FirebaseContext.Consumer>
