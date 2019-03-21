@@ -1,6 +1,10 @@
 import React from 'react';
 import { MDBDataTable, MDBIcon, MDBBtn } from 'mdbreact';
 
+// PC Ekle Butonu ve arayüzü
+// Admin -> Doctor kaydı , isim, email, auto generate pk, password 
+
+
 const AdminDashboard = () => {
   const data = {
     columns: [

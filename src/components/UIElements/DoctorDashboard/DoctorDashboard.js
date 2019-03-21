@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { MDBCol, MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
 import { Bar, Pie } from 'react-chartjs-2';
 
+// Doctor -> Patient Name, Age, Gender, emial, password
+
 class DoctorDashboard extends Component {
     render() {
         const dataBar = {
