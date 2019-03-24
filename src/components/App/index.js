@@ -15,10 +15,32 @@ import CreateDoctorPage from '../CreateDoctor';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
+import {AuthUserContext} from '../Session';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      authUser: null,
+    };
+  }
+
+  componentDidMount(){
+    this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
+      authUser
+        ? this.setState({authUser})
+        : this.setState({authUser: null});
+    });
+  }
+
+  componentWillUnmount(){
+    this.listener();
+  }
+
   render() {
     return (
+      <AuthUserContext.Provider value={this.state.authUser}>
       <Router>
         <div>
         <Navigation />
@@ -37,6 +59,7 @@ class App extends Component {
           
         </div>
       </Router>
+      </AuthUserContext.Provider>
     );
   }
 }
