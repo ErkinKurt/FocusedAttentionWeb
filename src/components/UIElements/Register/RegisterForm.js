@@ -67,7 +67,7 @@ class RegisterForm extends Component {
                             <p className="h5 text-center mb-4">Sign up</p>
                             <div className="grey-text">
                                 <MDBInput
-                                    label="Your name"
+                                    label="Your full name"
                                     value={username}
                                     name="username"
                                     icon="user"

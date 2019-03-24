@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from 'mdbreact';
 
 class CreateDoctorForm extends Component {
   render() {
@@ -12,7 +12,7 @@ class CreateDoctorForm extends Component {
               <div className="grey-text">
                 <MDBInput
                   label="Doctor's Full Name"
-                  icon="user"
+                  icon="user-md"
                   group
                   type="text"
                   validate
@@ -29,13 +29,13 @@ class CreateDoctorForm extends Component {
                   success="right"
                 />
                 <MDBInput
-                label="Doctor's Password"
-                name='password'
-                value='{password}'
-                icon="lock"
-                group
-                type="password"
-                validate
+                  label="Doctor's Password"
+                  name='password'
+                  value='{password}'
+                  icon="lock"
+                  group
+                  type="password"
+                  validate
                 />
               </div>
               <div className="text-center">
