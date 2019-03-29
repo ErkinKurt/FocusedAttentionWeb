@@ -16,8 +16,12 @@ class AdminDashboard extends Component {
     super(props);
     this.state = {...ADMINDASHBOARD_STATE};
     this.redirectToCreateDoctorForm = this.redirectToCreateDoctorForm.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
   redirectToCreateDoctorForm = () => {
     this.setState({
@@ -27,13 +31,13 @@ class AdminDashboard extends Component {
   
   render() {
     
-      let { isRedirected } = this.state;
+    let { isRedirected } = this.state;
 
     if (isRedirected) {
       return (
           <Redirect to={ROUTES.CREATEDOCTOR} />
       );
-  }
+    }
 
     const data = {
       columns: [
@@ -576,12 +580,7 @@ class AdminDashboard extends Component {
           <MDBBtn color="elegant">Create a PC</MDBBtn>
           <MDBBtn color="elegant" onClick={this.redirectToCreateDoctorForm}>Create a Doctor</MDBBtn>
           <hr />
-          <MDBDataTable
-              striped
-              bordered
-              small
-              data={data}
-          />
+          <MDBDataTable striped bordered small data={data} />
       </div>
     );
   }

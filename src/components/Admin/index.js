@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import AdminDashboard from '../UIElements/AdminDashboard/AdminDashboard';
+import { FirebaseContext } from '../Firebase';
 
-export default class index extends Component {
+class Admin extends Component {
   render() {
     return (
-      <div>
-        <AdminDashboard />
-      </div>
+      <FirebaseContext.Consumer>
+        {firebase => <AdminDashboard firebase={firebase} />}
+      </FirebaseContext.Consumer>
     )
   }
 }
+
+export default Admin;

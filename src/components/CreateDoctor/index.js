@@ -1,10 +1,17 @@
 import React, { Component } from 'react'
 import CreateDoctorForm from '../UIElements/CreateDoctorForm/CreateDoctorForm';
+import { FirebaseContext } from '../Firebase';
 
-export default class CreateDoctor extends Component {
+class CreateDoctor extends Component {
   render() {
     return (
-      <CreateDoctorForm />
+      <div>
+         <FirebaseContext.Consumer>
+          {firebase => <CreateDoctorForm firebase={firebase} />}
+        </FirebaseContext.Consumer>
+      </div>
     )
   }
 }
+
+export default CreateDoctor;
