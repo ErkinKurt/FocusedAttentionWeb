@@ -6,14 +6,35 @@ import { MDBDataTable, MDBIcon, MDBBtn } from 'mdbreact';
 // PC Ekle Butonu ve arayüzü
 // Admin -> Doctor kaydı , isim, email, auto generate pk, password 
 
+const ADMINDASHBOARD_STATE = {
+  'isRedirected': false,
+}
 
 class AdminDashboard extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {...ADMINDASHBOARD_STATE};
+    this.redirectToCreateDoctorForm = this.redirectToCreateDoctorForm.bind(this);
+  }
+
+
   redirectToCreateDoctorForm = () => {
-    return(<Redirect to={ROUTES.CREATEDOCTOR} />)
+    this.setState({
+      isRedirected: true
+    });
   }
   
   render() {
+    
+      let { isRedirected } = this.state;
+
+    if (isRedirected) {
+      return (
+          <Redirect to={ROUTES.CREATEDOCTOR} />
+      );
+  }
+
     const data = {
       columns: [
         {
