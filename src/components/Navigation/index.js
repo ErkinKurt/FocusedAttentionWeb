@@ -50,9 +50,7 @@ class Navigation extends Component {
   render() {
     return (
       <AuthUserContext.Consumer>
-        <div>
-          {authUser => authUser ? <NavigationAuth /> : <NavigationNonAuth />}
-        </div>
+        {authUser => authUser ? <NavigationAuth /> : <NavigationNonAuth />}
       </AuthUserContext.Consumer>
       // <div>
       //   <ul className="navbar-ul">
