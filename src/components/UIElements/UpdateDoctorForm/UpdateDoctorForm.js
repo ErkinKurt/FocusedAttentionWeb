@@ -24,7 +24,7 @@ class CreateDoctorForm extends Component {
         <MDBRow className="d-flex justify-content-center mt-5">
           <MDBCol md="6">
             <form>
-              <p className="h5 text-center mb-4">Create New Doctor</p>
+              <p className="h5 text-center mb-4">Update Doctor</p>
               <div className="grey-text">
                 <MDBInput
                   label="Full Name"

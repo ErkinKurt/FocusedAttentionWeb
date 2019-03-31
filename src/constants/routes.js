@@ -8,3 +8,5 @@ export const PASSWORD_FORGET = '/pw-forget';
 export const DOCTOR = '/doctor';
 export const PATIENT = '/patient';
 export const CREATEDOCTOR = '/createdoctor';
+export const CREATEPC = '/createpc';
+export const UPDATEDOCTOR = '/updatedoctor';

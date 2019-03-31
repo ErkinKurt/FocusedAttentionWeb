@@ -5,6 +5,7 @@ import { FirebaseContext } from '../Firebase';
 import { SignOut } from '../SignOut';
 import { AuthUserContext } from '../Session';
 
+// Navigation, when a user signed in to system
 class NavigationAuth extends Component {
   render() {
     return (
@@ -19,6 +20,15 @@ class NavigationAuth extends Component {
           <Link to={ROUTES.ACCOUNT}>Account</Link>
         </li>
         <li className="navbar-li">
+          <Link to={ROUTES.ADMIN}>Admin</Link>
+        </li>
+        <li className="navbar-li">
+          <Link to={ROUTES.DOCTOR}>Doctor</Link>
+        </li>
+        <li className="navbar-li">
+          <Link to={ROUTES.PATIENT}>Patient</Link>
+        </li>
+        <li className="navbar-li">
           <FirebaseContext.Consumer>
             {firebase => <SignOut firebase={firebase} />}
           </FirebaseContext.Consumer>
@@ -28,6 +38,7 @@ class NavigationAuth extends Component {
   }
 };
 
+// Navigation, when a user not signed in to system
 class NavigationNonAuth extends Component {
   render() {
     return (
