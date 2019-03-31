@@ -1,11 +1,44 @@
 import React, { Component } from 'react';
 import { MDBCol, MDBBtn, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
 import { Bar, Pie } from 'react-chartjs-2';
+import { Redirect, withRouter } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 
 // Doctor -> Patient Name, Age, Gender, email, password
 
+const DOCTORDASHBOARD_STATE = {
+    'isRedirectedToCreatePatient': false,
+}
+
 class DoctorDashboard extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {...DOCTORDASHBOARD_STATE};
+    }
+
+    onChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
+    };
+
+    redirectToCreatePatientForm = () => {
+        this.setState({
+            isRedirectedToCreatePatient: true
+        });
+    }
+
+
+
     render() {
+
+        let { isRedirectedToCreatePatient } = this.state;
+
+        if (isRedirectedToCreatePatient) {
+            return(
+                <Redirect to = {ROUTES.CREATEPATIENT} />
+            )
+        }
+
         const dataBar = {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
             datasets: [
@@ -65,7 +98,7 @@ class DoctorDashboard extends Component {
             <div className = "responsive" >
                 <h2>Welcome Doctor</h2>
                 {/* Redirect to create patient form*/}
-                <MDBBtn color="elegant">Create Patient</MDBBtn>
+                <MDBBtn color="elegant" onClick={this.redirectToCreatePatientForm}>Create Patient</MDBBtn>
                 {/* Redirect to datatable, in datatable, edit patient and show patient's results
                 Maybe it can be unnecessary we can show it at the beginning, when the page opens */}
                 <MDBBtn color="elegant">Show Patients</MDBBtn>
@@ -138,4 +171,4 @@ class DoctorDashboard extends Component {
     }
 }
 
-export default DoctorDashboard;
+export default withRouter(DoctorDashboard);
