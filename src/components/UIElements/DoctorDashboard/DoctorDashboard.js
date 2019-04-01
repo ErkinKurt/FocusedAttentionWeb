@@ -8,6 +8,7 @@ import * as ROUTES from '../../../constants/routes';
 
 const DOCTORDASHBOARD_STATE = {
     'isRedirectedToCreatePatient': false,
+    'isRedirectedToGameAdjustment': false,
 }
 
 class DoctorDashboard extends Component {
@@ -27,15 +28,27 @@ class DoctorDashboard extends Component {
         });
     }
 
+    redirectToGameAdjustmentForm = () => {
+        this.setState({
+            isRedirectedToGameAdjustment: true
+        });
+    }
+
 
 
     render() {
 
-        let { isRedirectedToCreatePatient } = this.state;
+        let { isRedirectedToCreatePatient, isRedirectedToGameAdjustment } = this.state;
 
         if (isRedirectedToCreatePatient) {
             return(
                 <Redirect to = {ROUTES.CREATEPATIENT} />
+            )
+        }
+
+        if (isRedirectedToGameAdjustment) {
+            return(
+                <Redirect to = {ROUTES.GAMEADJUSTEMT} />
             )
         }
 
@@ -108,7 +121,7 @@ class DoctorDashboard extends Component {
                 {/* Send an email to himself/herself of some specific reports */}
                 <MDBBtn color="elegant">Email Report</MDBBtn> 
                 {/* Adjustment of test difficulties for current scenario */}
-                <MDBBtn color="elegant">Adjustments for Test</MDBBtn> 
+                <MDBBtn color="elegant" onClick={this.redirectToGameAdjustmentForm}>Adjustments for Test</MDBBtn> 
                 <hr />
                 {/* Tables */}
                 <MDBRow className="mb-4">

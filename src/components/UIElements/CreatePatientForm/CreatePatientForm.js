@@ -60,7 +60,7 @@ class CreatePatientForm extends Component {
               />
             </div>
             <div className="text-center">
-              <MDBBtn color="primary">Register</MDBBtn>
+              <MDBBtn color="primary">Create Patient</MDBBtn>
             </div>
           </form>
         </MDBCol>
