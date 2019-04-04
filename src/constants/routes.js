@@ -11,4 +11,4 @@ export const CREATEDOCTOR = '/create-doctor';
 export const CREATEPC = '/create-pc';
 export const UPDATEDOCTOR = '/update-doctor';
 export const CREATEPATIENT = '/create-patient';
-export const GAMEADJUSTEMT = '/game-adjustment';
+export const GAMEADJUSTMENT = '/game-adjustment';

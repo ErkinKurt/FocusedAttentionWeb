@@ -63,7 +63,7 @@ class App extends Component {
           <Route path={ROUTES.CREATEPC} component={CreatePCPage}/>
           <Route path={ROUTES.UPDATEDOCTOR} component={UpdateDoctorPage}/>
           <Route path={ROUTES.CREATEPATIENT} component={CreatePatientPage}/>
-          <Route path={ROUTES.GAMEADJUSTEMT} component={GameAdjustmentPage}/>
+          <Route path={ROUTES.GAMEADJUSTMENT} component={GameAdjustmentPage}/>
           
         </div>
       </Router>
