@@ -21,7 +21,7 @@ export const createBlockForPatient = functions.https.onRequest((request, respons
         console.log(decodedIdToken);
         const patientId = request.get('PatientId');
 
-        admin.firestore().collection('Patients').doc(patientId).set(request.body)
+        admin.firestore().collection('Patients').doc(patientId).collection("Experiments").add(request.body)
             .then(success => {
                 console.log("Document created successfully.");
                 response.statusCode = 200;
