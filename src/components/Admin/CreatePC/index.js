@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import CreatePCForm from '../UIElements/CreatePCForm/CreatePCForm';
-import { FirebaseContext } from '../Firebase';
+import CreatePCForm from '../../UIElements/CreatePCForm/CreatePCForm';
+import { FirebaseContext } from '../../Firebase';
 
 class CreatePC extends Component {
   render() {

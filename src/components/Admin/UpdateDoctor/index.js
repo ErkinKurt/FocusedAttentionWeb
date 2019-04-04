@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import UpdateDoctorForm from '../UIElements/UpdateDoctorForm/UpdateDoctorForm';
-import { FirebaseContext } from '../Firebase';
+import UpdateDoctorForm from '../../UIElements/UpdateDoctorForm/UpdateDoctorForm';
+import { FirebaseContext } from '../../Firebase';
 
 class UpdateDoctor extends Component {
   render() {

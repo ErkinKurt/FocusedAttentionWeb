@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import GameAdjustmentsForm from '../UIElements/GameAdjustmentsForm/GameAdjustmentsForm'
-import { FirebaseContext } from '../Firebase';
+import GameAdjustmentsForm from '../../UIElements/GameAdjustmentsForm/GameAdjustmentsForm'
+import { FirebaseContext } from '../../Firebase';
 
 export default class CreateDoctor extends Component {
   render() {
