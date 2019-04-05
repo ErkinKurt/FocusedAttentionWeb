@@ -40,6 +40,10 @@ class DoctorDashboard extends Component {
         this.state = {...DOCTORDASHBOARD_STATE};
     }
 
+    componentDidMount(){
+      this.props.firebase.createPcForDoctor("erkin");
+    }
+
     handleChangeStart = (date) => {
       this.setState({
         startDate: date,

@@ -1,6 +1,7 @@
 import app from "firebase/app";
 import FirebaseContext from './context';
 import 'firebase/auth';
+import 'firebase/firestore';
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,7 +17,8 @@ export class Firebase{
     app.initializeApp(config);
 
     this.auth = app.auth();
-    this.doCreateUserWithEmailAndPassword = this.doCreateUserWithEmailAndPassword.bind(this);
+    this.firestore = app.firestore();
+    
   }
 
   // *** Auth API ***
@@ -33,6 +35,14 @@ export class Firebase{
 
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
+
+  //Firebase Util   
+  createPcForDoctor = (pcName) => {
+    var doctorName = this.auth.currentUser.email.split('@gmail.com')[0];
+    var alias = pcName + doctorName + "@gmail.com";
+    var password = "Password1.";
+    this.auth.createUserWithEmailAndPassword(alias, password);
+  } 
 
 }
 
