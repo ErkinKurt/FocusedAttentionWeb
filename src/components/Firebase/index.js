@@ -12,13 +12,18 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 
-export class Firebase{
-  constructor(){
+export class Firebase {
+  constructor() {
     app.initializeApp(config);
 
     this.auth = app.auth();
     this.firestore = app.firestore();
-    
+
+    //Crud app instantiation...
+    this.crudApp = app.initializeApp(config, "crud");
+
+    this.crudAuth = this.crudApp.auth();
+    this.password = "Password1.";
   }
 
   // *** Auth API ***
@@ -37,14 +42,52 @@ export class Firebase{
     this.auth.currentUser.updatePassword(password);
 
   //Firebase Util   
+
+  ///<summary>Create pc with authenticated user's alies.</summary>
+  ///<param name="pcName" dataType="string"> Name of the pc.</param>
   createPcForDoctor = (pcName) => {
     var doctorName = this.auth.currentUser.email.split('@gmail.com')[0];
     var alias = pcName + doctorName + "@gmail.com";
-    var password = "Password1.";
-    this.auth.createUserWithEmailAndPassword(alias, password);
-  } 
+    this.crudAuth.createUserAndRetrieveDataWithEmailAndPassword(alias, this.password)
+      .then(response => {
+        console.log("Create pc response: " + response);
+        this.crudAuth.signOut();
+      })
+      .catch(error => console.log("Error during creating Pc for doctor: " + error))
+  }
+
+  //Get all patients for authenticated doctor. Returns QuerySnapshot..
+  //QuerySnapshot.data() will get the related document in json format.
+  //Returns promise. Use .then() to resolve and .catch() to handle error.
+  getAllPatientsForDoctor = () => {
+    var doctorId = this.auth.currentUser.uid;
+    return this.firestore.collection("Doctors").doc(doctorId).collection("Patients").get();
+  }
+
+  ///<summary>Create patients for authenticated doctor.</summary>
+  ///<param name="patient" dataType="json"> Patient object.</param>
+  createPatientForDoctor = (patient) => {
+    if (patient !== null && patient.email !== null) {
+      var doctorId = this.auth.currentUser.uid;
+      var patientEmail = patient.email;
+      this.crudAuth.createUserWithEmailAndPassword(patientEmail, this.password)
+        .then(() => {
+          var patientId = this.crudAuth.currentUser.uid;
+          this.firestore.collection("Doctors").doc(doctorId).collection("Patients").doc(patientId)
+            .set(patient)
+            .then(resolve => {
+              console.log(resolve);
+              this.crudAuth.signOut();
+            })
+            .catch(error => console.log("Error on adding patient to db." + error))
+        }).catch(error => console.log("Error on creating patient." + error))
+    }
+    else{
+      console.log("No patient passed during create patient method.");
+    }
+  }
 
 }
 
 export default Firebase;
-export {FirebaseContext};
+export { FirebaseContext };
