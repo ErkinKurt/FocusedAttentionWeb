@@ -1,8 +1,57 @@
 import React, { Component } from 'react';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBAlert } from 'mdbreact';
+import { Redirect, withRouter } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
+
+const CREATEPCFORM_STATE = {
+    'pcName': '',
+    'isRedirectToAdmin': false,
+}
 
 class CreatePCForm extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {...CREATEPCFORM_STATE};
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    redirectToAdmin = () => {
+        this.setState({
+            isRedirectToAdmin : true
+        });
+    }
+
+    onSubmit = (event) => {
+        let { pcName } = this.state;
+        let response = this.props.firebase.createPcForDoctor(pcName);
+        if(response)
+            this.redirectToAdmin();
+        event.preventDefault();
+    }
+
+    onChange = (event) => {
+        this.setState({ [event.target.name]: event.target.value });
+    }
+    
+    
+
   render() {
+      let { pcName, isRedirectToAdmin } = this.state;
+
+      if (isRedirectToAdmin) {
+        setTimeout(function() {
+            return(
+                <div>
+                    {console.log("Redirect")}
+                    <Redirect to={ROUTES.ADMIN} />
+                </div>
+            )
+        }, 2000
+        );
+    }
+
     return (
       <MDBContainer>
                 <MDBRow className="d-flex justify-content-center mt-5">
@@ -12,7 +61,7 @@ class CreatePCForm extends Component {
                             <div className="grey-text">
                                 <MDBInput
                                     label="PC Name"
-                                    value=""
+                                    value={pcName}
                                     name="pcName"
                                     icon="desktop"
                                     group
@@ -24,8 +73,9 @@ class CreatePCForm extends Component {
                                 />   
                             </div>
                             <div className="text-center">
-                                <MDBBtn color="success">Add PC</MDBBtn>
+                                <MDBBtn onClick={this.onSubmit} color="success">Add PC</MDBBtn>
                             </div>
+                            
                         </form>
                     </MDBCol>
                 </MDBRow>
@@ -34,4 +84,4 @@ class CreatePCForm extends Component {
   }
 }
 
-export default CreatePCForm;
+export default withRouter(CreatePCForm);

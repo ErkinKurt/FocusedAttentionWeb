@@ -52,8 +52,12 @@ export class Firebase {
       .then(response => {
         console.log("Create pc response: " + response);
         this.crudAuth.signOut();
+        return true;
       })
-      .catch(error => console.log("Error during creating Pc for doctor: " + error))
+      .catch(error => {
+        console.log("Error during creating Pc for doctor: " + error);
+        return false;
+      })
   }
 
   //Get all patients for authenticated doctor. Returns QuerySnapshot..

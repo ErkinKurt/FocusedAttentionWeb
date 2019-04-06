@@ -5,11 +5,9 @@ import { FirebaseContext } from '../../Firebase';
 class CreatePC extends Component {
   render() {
     return (
-        <div>
             <FirebaseContext.Consumer>
                 {firebase => <CreatePCForm firebase={firebase} />}
-            </FirebaseContext.Consumer>
-        </div>
+           </FirebaseContext.Consumer>
     )
   }
 }
