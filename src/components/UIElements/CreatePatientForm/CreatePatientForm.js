@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBInput, MDBIcon } from 'mdbreact';
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-
+import Combobox from 'react-widgets/lib/Combobox';
+import 'react-widgets/dist/css/react-widgets.css';
 
 const CREATEPATIENTFORM_STATE = {
   'name': '',
   'age': '',
-  'gender': '',
+  'value': 'select',
   'email': '',
   'password': ''
 };
 
-const options = [
-  'Select', 'Male', 'Female'
-];
+let genders = ['select', 'male', 'female'];
 
-const defaultOption = options[0];
 
 
 class CreatePatientForm extends Component {
@@ -32,24 +28,26 @@ class CreatePatientForm extends Component {
       this.setState({ [event.target.name]: event.target.value });
   }
 
+
   onSubmit = (event) => {
-    let { name, age, gender, email, password } = this.state;
+    let { name, age, value, email, password } = this.state;
     let patient = {
-      name, age, email, password
+      name, age, value, email, password,
     }
     this.props.firebase.createPatientForDoctor(patient);
     event.preventDefault();
   }
 
   render() {
-    let { name, age, gender, email, password } = this.state;
+    let { name, age, value, email, password } = this.state;
+
     return (
       <MDBContainer>
       <MDBRow className="d-flex justify-content-center mt-5">
         <MDBCol md="6">
           <form>
             <p className="h5 text-center mb-4">Create Patient</p>
-            <div className="grey-text">
+            <div className="black-text">
               <MDBInput
                 label="Full Name"
                 name="name"
@@ -76,8 +74,8 @@ class CreatePatientForm extends Component {
               />
               <MDBIcon style = {{fontSize: "30px", paddingRight: "10px"}} far icon="id-card" />
               <label style={{paddingRight: "10px"}}>Gender</label>
-              <Dropdown options={options} onChange={this._onSelect} value={defaultOption} 
-              placeholder="Select an option" />
+              <Combobox onChange={value=>this.setState({value})} value={value} data={genders}  />
+
               <MDBInput
                 label="Email"
                 name="email"
