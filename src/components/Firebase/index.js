@@ -64,14 +64,17 @@ export class Firebase {
   //QuerySnapshot.data() will get the related document in json format.
   //Returns promise. Use .then() to resolve and .catch() to handle error.
   getAllPatientsForDoctor = () => {
-    var doctorId = this.auth.currentUser.uid;
-    return this.firestore.collection("Doctors").doc(doctorId).collection("Patients").get();
-  }
+    if(this.auth.currentUser === null)  return null;
+    else{
+      var doctorId = this.auth.currentUser.uid;
+      return this.firestore.collection("Doctors").doc(doctorId).collection("Patients").get();
+    }
+ }
 
   ///<summary>Create patients for authenticated doctor.</summary>
   ///<param name="patient" dataType="json"> Patient object.</param>
   createPatientForDoctor = (patient) => {
-    if (patient !== null && patient.email !== null) {
+    if (patient !== null && patient.email !== null && this.auth.currentUser !== null) {
       var doctorId = this.auth.currentUser.uid;
       var patientEmail = patient.email;
       this.crudAuth.createUserWithEmailAndPassword(patientEmail, this.password)

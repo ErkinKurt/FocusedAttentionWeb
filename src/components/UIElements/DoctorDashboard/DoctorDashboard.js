@@ -39,6 +39,32 @@ class DoctorDashboard extends Component {
     super(props);
     this.state = { ...DOCTORDASHBOARD_STATE };
     this.firebase = this.props.firebase;
+    this.patientsArray = [];
+  }
+
+  showPatients = () => {
+    var firebasePromise = this.props.firebase.getAllPatientsForDoctor();
+    if(firebasePromise !== null){
+      firebasePromise.then(snapshot => {
+        snapshot.forEach(element => {
+          this.patientsArray.push(element.data());
+          console.log(element.data());
+        })
+      });
+    }
+    else {
+      return;
+    }
+  }
+
+  componentDidMount(){
+    this.showPatients();
+    if(this.patientsArray !== null)
+    {
+      this.patientsArray.forEach(element => {
+        console.log(element);
+      })
+    }
   }
 
   // componentDidMount() {
@@ -344,7 +370,7 @@ class DoctorDashboard extends Component {
         <MDBBtn color="elegant">Email Report</MDBBtn>
         {/* Redirect to datatable, in datatable, edit patient and show patient's results
                 Maybe it can be unnecessary we can show it at the beginning, when the page opens */}
-        <MDBBtn color="elegant">Show Patients</MDBBtn>
+        <MDBBtn color="elegant" onClick={this.showPatients()}>Show Patients</MDBBtn>
         <hr />
         {/* Datatable */}
         <MDBDataTable striped bordered small data={data} />
