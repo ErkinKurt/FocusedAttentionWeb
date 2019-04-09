@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBBtn, MDBInput, MDBDataTable, MDBIcon, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
 import { Redirect, withRouter } from 'react-router-dom';
-import DoctorGetReportsForm from '../DoctorGetReportsForm/DoctorGetReportsForm';
 import * as ROUTES from '../../../constants/routes';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -42,13 +41,22 @@ class DoctorDashboard extends Component {
     this.patientsArray = [];
   }
 
+  processPatientReport = () => {
+    var patientId = "ErkinKurt";
+    var firebasePromise = this.props.firebase.getAllExperimentsWithPatientId(patientId);
+    firebasePromise.then(snapshot => {
+      snapshot.forEach(element => {
+        console.log(element.data());
+      })
+    })
+  }
+
   showPatients = () => {
     var firebasePromise = this.props.firebase.getAllPatientsForDoctor();
     if(firebasePromise !== null){
       firebasePromise.then(snapshot => {
         snapshot.forEach(element => {
           this.patientsArray.push(element.data());
-          console.log(element.data());
         })
       });
     }
@@ -59,36 +67,7 @@ class DoctorDashboard extends Component {
 
   componentDidMount(){
     this.showPatients();
-    if(this.patientsArray !== null)
-    {
-      this.patientsArray.forEach(element => {
-        console.log(element);
-      })
-    }
   }
-
-  // componentDidMount() {
-  //   this.firebase.createPcForDoctor("newTest");
-  //   console.log(this.firebase.auth.currentUser.email);
-  //   console.log("Pc creation completed.");
-  // //Pass patient object but it must have email.
-  //   this.firebase.createPatientForDoctor(
-  //     {
-  //       email: "yalnizim@gmail.com",
-  //       name: "Sena Sener",
-  //       sevemedim: "hic sevmedim",
-  //       cheers: "Damien Rice"
-  //     }
-  //   );
-  //   console.log("Patient for doctor completed.");
-  //   this.firebase.getAllPatientsForDoctor()
-  //     .then(snapshot => {
-  //       snapshot.forEach(element => {
-  //         console.log(element.data());
-  //       })
-  //     }).catch(error => console.log("Error on get all patients" + error));
-  //   console.log("Get all patients completed");
-  // }
 
   handleChangeStart = (date) => {
     this.setState({
@@ -202,7 +181,7 @@ class DoctorDashboard extends Component {
               </div>
               <br /> <br /> <hr />
               <div className="text-center">
-                <MDBBtn color="primary" onClick={this.onSubmit}>Get Report</MDBBtn>
+                <MDBBtn color="primary" onClick={this.processPatientReport()}>Get Report</MDBBtn>
               </div>
             </form>
           </MDBModalBody>

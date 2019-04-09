@@ -64,12 +64,24 @@ export class Firebase {
   //QuerySnapshot.data() will get the related document in json format.
   //Returns promise. Use .then() to resolve and .catch() to handle error.
   getAllPatientsForDoctor = () => {
-    if(this.auth.currentUser === null)  return null;
-    else{
+    if (this.auth.currentUser === null) return null;
+    else {
       var doctorId = this.auth.currentUser.uid;
       return this.firestore.collection("Doctors").doc(doctorId).collection("Patients").get();
     }
- }
+  }
+
+  //Get all experiments of the given patientId. 
+  //Need to figure out what will be the query types? Do we wanna get specific experiment?
+  //Do we need to get all experiments?
+  getAllExperimentsWithPatientId = (patientId) => {
+    return this.firestore.collection("Patients").doc(patientId).collection("Experiments").get();
+  }
+
+  //Get all experiments of the given patientId and gameScenario
+  getAllExperimentsWithPatientIdandGameScenario(patientId, gameScenario){
+    return this.firestore.collection("Patients").doc(patientId).collection("Experiments").where("GameId", "==", gameScenario).get();
+  }
 
   ///<summary>Create patients for authenticated doctor.</summary>
   ///<param name="patient" dataType="json"> Patient object.</param>
@@ -89,7 +101,7 @@ export class Firebase {
             .catch(error => console.log("Error on adding patient to db." + error))
         }).catch(error => console.log("Error on creating patient." + error))
     }
-    else{
+    else {
       console.log("No patient passed during create patient method.");
     }
   }
