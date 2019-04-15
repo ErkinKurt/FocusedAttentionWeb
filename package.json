@@ -11,7 +11,8 @@
     "react-dropdown": "^1.6.4",
     "react-router-dom": "^5.0.0 ",
     "react-scripts": "2.1.8",
-    "react-widgets": "^4.4.10"
+    "react-widgets": "^4.4.10",
+    "stats-lite": "^2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

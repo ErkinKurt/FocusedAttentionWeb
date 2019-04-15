@@ -2,6 +2,7 @@ import app from "firebase/app";
 import FirebaseContext from './context';
 import 'firebase/auth';
 import 'firebase/firestore';
+import * as stats from "stats-lite";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -24,6 +25,10 @@ export class Firebase {
 
     this.crudAuth = this.crudApp.auth();
     this.password = "Password1.";
+
+    //Experiments...
+    //Kod leş oldu. SOLID Principle ile gram alakası yok. Pu ak... Yetiştirmemiz lazım ama ... degil
+    this.ExperimentResults = [];
   }
 
   // *** Auth API ***
@@ -104,6 +109,119 @@ export class Firebase {
     else {
       console.log("No patient passed during create patient method.");
     }
+  }
+
+  //Calculate Patient Statistics. In an experiment
+
+  getAllExperimentResults(){
+    return this.ExperimentResults;
+  }
+
+  processAllExperiments(experiments){
+    this.ExperimentResults.length = 0;
+    experiments.forEach(experiment => {
+      this.ExperimentResults.push(this.processAnExperiment(experiment));
+    });
+  }
+
+  //Calculate avgBlocks mean and sd for total experiment.
+  calculateAvgResultForExperiment(avgBlocks){
+    var result = {
+      ConditionError: [],
+      CorrectResponse: [],
+      OmissionError: [],
+      ResponseTime: []
+    };
+    var avgResult = {
+      avgConditionError: 0,
+      sdConditionError: 0,
+      avgCorrectResponse: 0,
+      sdCorrectResponse: 0,
+      avgOmissionError: 0,
+      sdOmmisionError: 0,
+      avgResponseTime:0,
+      sdResponseTime: 0,
+    };
+    avgBlocks.forEach(block => {
+      result.ConditionError.push(block.avgConditionError);
+      result.CorrectResponse.push(block.avgCorrectResponse);
+      result.OmissionError.push(block.avgOmissionError);
+      result.ResponseTime.push(block.avgResponseTime);
+    })
+    avgResult.avgConditionError = stats.mean(result.ConditionError);
+    avgResult.sdConditionError = stats.stdev(result.ConditionError);
+    avgResult.avgCorrectResponse = stats.mean(result.CorrectResponse);
+    avgResult.sdCorrectResponse = stats.stdev(result.CorrectResponse);
+    avgResult.avgOmissionError = stats.mean(result.OmissionError);
+    avgResult.sdOmmisionError = stats.stdev(result.OmissionError);
+    avgResult.avgResponseTime = stats.mean(result.ResponseTime);
+    avgResult.sdResponseTime = stats.stdev(result.ResponseTime);
+
+    return avgResult;
+  }
+
+  processAnExperiment(experiment){
+    var experimentToPush = {
+      experimentId: "",
+      avgBlocks: [],
+      avgResult: {}
+    };
+
+    var blockList = experiment.BlockList;
+    experimentToPush.experimentId = experiment.GameId;
+    blockList.forEach(block => {
+      experimentToPush.avgBlocks.push(this.calculateAverageTrialValuesInBlock(block));
+    });
+    experimentToPush.avgResult = this.calculateAvgResultForExperiment(experimentToPush.avgBlocks);
+   
+    return experimentToPush;
+  }
+
+  calculateAverageTrialValuesInBlock(block){
+    var trials = block.Trials;
+    var avgTrial = {
+      ConditionError: [],
+      CorrectResponse: [],
+      OmissionError: [],
+      ResponseTime: []
+    };
+    var result = {
+      blockId: 0,
+      avgConditionError: 0,
+      sdConditionError: 0,
+      avgCorrectResponse: 0,
+      sdCorrectResponse: 0,
+      avgOmissionError: 0,
+      sdOmmisionError: 0,
+      avgResponseTime:0,
+      sdResponseTime: 0,
+    }
+    trials.forEach(element => {
+      avgTrial.ConditionError.push(element.ConditionError);
+      avgTrial.CorrectResponse.push(element.CorrectResponse);
+      avgTrial.ResponseTime.push(element.ResponseTime);
+      if(element.OmissionError){
+        avgTrial.OmissionError.push(1);
+      }
+      else{
+        avgTrial.OmissionError.push(0);
+      }
+    });
+    console.log("Block Id: " + block.BlockId + "ConditionError: mean: " + stats.mean(avgTrial.ConditionError) + "sd: " + stats.stdev(avgTrial.ConditionError));
+    console.log("Block Id: " + block.BlockId + "CorrectResponse: mean: " + stats.mean(avgTrial.CorrectResponse)+ "sd: " + stats.stdev(avgTrial.CorrectResponse));
+    console.log("Block Id: " + block.BlockId + "OmissionError: mean: " + stats.mean(avgTrial.OmissionError)+ "sd: " + stats.stdev(avgTrial.OmissionError));
+    console.log("Block Id: " + block.BlockId + "ResponseTime: mean: " + stats.mean(avgTrial.ResponseTime)+ "sd: " + stats.stdev(avgTrial.ResponseTime));
+    console.log("------------------------------------------------------------------------------------------------");
+    result.blockId = block.BlockId;
+    result.avgConditionError = stats.mean(avgTrial.ConditionError);
+    result.sdConditionError = stats.stdev(avgTrial.ConditionError);
+    result.avgCorrectResponse = stats.mean(avgTrial.CorrectResponse);
+    result.sdCorrectResponse = stats.stdev(avgTrial.CorrectResponse);
+    result.avgOmissionError = stats.mean(avgTrial.OmissionError);
+    result.sdOmmisionError = stats.stdev(avgTrial.OmissionError);
+    result.avgResponseTime = stats.mean(avgTrial.ResponseTime);
+    result.sdResponseTime = stats.mean(avgTrial.ResponseTime);
+    return result;
   }
 
 }
