@@ -30,6 +30,7 @@ const DOCTORDASHBOARD_STATE = {
   'radio': 1,
   'startDate': new Date(),
   'endDate': new Date(),
+  'patientsState': []
 }
 
 class DoctorDashboard extends Component {
@@ -38,7 +39,6 @@ class DoctorDashboard extends Component {
     super(props);
     this.state = { ...DOCTORDASHBOARD_STATE };
     this.firebase = this.props.firebase;
-    this.patientsArray = [];
   }
 
   processPatientReport = () => {
@@ -51,22 +51,23 @@ class DoctorDashboard extends Component {
     })
   }
 
-  showPatients = () => {
+  showPatients =  async () => {
     var firebasePromise = this.props.firebase.getAllPatientsForDoctor();
-    if(firebasePromise !== null){
-      firebasePromise.then(snapshot => {
+    let patients = [];
+    if(firebasePromise !== null) {
+      await firebasePromise.then(snapshot => {
         snapshot.forEach(element => {
-          this.patientsArray.push(element.data());
-        })
+          //console.log(element.data())
+          patients.push(element.data())
+        });
+        this.setState({
+          patientsState: patients
+        });
       });
     }
     else {
-      return;
+      return "Empty";
     }
-  }
-
-  componentDidMount(){
-    this.showPatients();
   }
 
   handleChangeStart = (date) => {
@@ -112,10 +113,15 @@ class DoctorDashboard extends Component {
     });
   }
 
+  componentDidMount = async () => { 
+    await this.showPatients();
+    console.log(this.state.patientsState);
+  }
 
 
   render() {
-    let { isRedirectedToCreatePatient, isRedirectedToGameAdjustment, modal2 } = this.state;
+    let { isRedirectedToCreatePatient, isRedirectedToGameAdjustment, 
+      modal2, patientsState } = this.state;
 
     if (isRedirectedToCreatePatient) {
       return (
@@ -192,7 +198,32 @@ class DoctorDashboard extends Component {
       )
     }
 
+    // Fields
+    let name=[];
+    let age=[];
+    let gender=[];
+    let email=[];
 
+    patientsState.forEach((item, index) => {
+      name[index] = item.name;
+      age[index] =  item.age;
+      gender[index] = item.value;
+      email[index] = item.email;
+    });
+
+    let patientsArray = []
+  
+    for (let i=0; i<name.length; i++) {
+      patientsArray.push({
+        name: name[i],
+        age: age[i],
+        gender: gender[i],
+        email: email[i],
+        edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
+        delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
+      })
+    }
+    
     const data = {
       columns: [
         {
@@ -232,111 +263,19 @@ class DoctorDashboard extends Component {
         }
       ],
 
-      // These are hard coded right now, but it will come from firebase
-      rows: [
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Umutcan Berk Hasret',
-          age: '22',
-          gender: 'Male',
-          email: 'umutcanberkhasret@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Erkin Kurt',
-          age: '22',
-          gender: 'Male',
-          email: 'erkinkurt@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Hamza Melih Bayrakdar',
-          age: '22',
-          gender: 'Male',
-          email: 'hamza@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          age: '22',
-          gender: 'Male',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-      ]
+      rows: patientsArray
     };
 
     return (
       <div className="responsive" >
         <h2>Welcome Doctor</h2>
         <h4>Here is the list of Patients</h4>
+        <span>{patientsState.forEach((item) => {
+          console.log("Name: " + item.name)
+          console.log("Age: " + item.age)
+          console.log("Gender: " + item.value)
+          console.log("Email: " + item.email)
+        })}</span>
         <hr />
         {/* Redirect to create patient form*/}
         <MDBBtn color="elegant" onClick={this.redirectToCreatePatientForm}>Create Patient</MDBBtn>
@@ -349,7 +288,7 @@ class DoctorDashboard extends Component {
         <MDBBtn color="elegant">Email Report</MDBBtn>
         {/* Redirect to datatable, in datatable, edit patient and show patient's results
                 Maybe it can be unnecessary we can show it at the beginning, when the page opens */}
-        <MDBBtn color="elegant" onClick={this.showPatients()}>Show Patients</MDBBtn>
+        <MDBBtn color="elegant" /*onClick={this.showPatients()}*/>Show Patients</MDBBtn>
         <hr />
         {/* Datatable */}
         <MDBDataTable striped bordered small data={data} />
