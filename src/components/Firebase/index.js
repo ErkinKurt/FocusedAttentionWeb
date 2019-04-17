@@ -68,8 +68,8 @@ export class Firebase {
   }
 
   //Insert computer into Cloudstore.. ClinicId is hardcodded.
-  createPcInFirestore = (clinicId, pcName) => {
-    this.firestore.collection("Computers").doc().set({
+  createPcInFirestore = (clinicId, uid, pcName) => {
+    this.firestore.collection("Computers").doc(uid).set({
       ClinicId: clinicId,
       PcName: pcName,
       GameAdjustment: {}
@@ -85,7 +85,7 @@ export class Firebase {
       .then(response => {
         console.log("Create pc response: " + response);
         //Creating Pc in database...
-        this.createPcInFirestore(this.ClinicId, alias);
+        this.createPcInFirestore(this.ClinicId, this.crudAuth.currentUser.uid, alias);
         this.crudAuth.signOut();
         return true;
       })
