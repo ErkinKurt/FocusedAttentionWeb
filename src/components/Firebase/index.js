@@ -25,6 +25,7 @@ export class Firebase {
 
     this.crudAuth = this.crudApp.auth();
     this.password = "Password1.";
+    this.ClinicId = "Tesla";
 
     //Experiments...
     //Kod leş oldu. SOLID Principle ile gram alakası yok. Pu ak... Yetiştirmemiz lazım ama ... degil
@@ -48,6 +49,33 @@ export class Firebase {
 
   //Firebase Util   
 
+  //Set GameAdjustment to Given Pc...
+  //Parameters GameAdjustment and PcId (DocumentId)
+  setGameAdjustmentForPc(gameAdjustmentObject, pcId){
+    this.firestore.collection("Computers").doc(pcId).update({
+      GameAdjustment: gameAdjustmentObject
+    }).then((success) => {
+      console.log("Game adjustment successfully updated." + success);
+    }).catch((error) => {
+      console.log("Error during updating GameAdjustment" + error);
+    })
+  }
+
+  //Get All pc for clinic..
+  getAllPcForClinic = (clinicId) => {
+    //ClinicId is fixed. We can change the implementation later Clinic is in charge. 
+    return this.firestore.collection("Computers").where("ClinicId", "==", this.ClinicId).get();
+  }
+
+  //Insert computer into Cloudstore.. ClinicId is hardcodded.
+  createPcInFirestore = (clinicId, pcName) => {
+    this.firestore.collection("Computers").doc().set({
+      ClinicId: clinicId,
+      PcName: pcName,
+      GameAdjustment: {}
+    });
+  }
+
   ///<summary>Create pc with authenticated user's alies.</summary>
   ///<param name="pcName" dataType="string"> Name of the pc.</param>
   createPcForDoctor = (pcName) => {
@@ -56,6 +84,8 @@ export class Firebase {
     this.crudAuth.createUserAndRetrieveDataWithEmailAndPassword(alias, this.password)
       .then(response => {
         console.log("Create pc response: " + response);
+        //Creating Pc in database...
+        this.createPcInFirestore(this.ClinicId, alias);
         this.crudAuth.signOut();
         return true;
       })

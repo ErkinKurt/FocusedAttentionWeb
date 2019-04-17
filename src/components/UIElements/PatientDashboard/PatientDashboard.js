@@ -22,9 +22,26 @@ export default class PatientDashboard extends Component {
     })
   }
 
+  //Example codes below in componentDidMount. If you wanna use firebase get methods use in async function and when call happens to firebase;
+  // use await keyword to wait thread to finish its work. 
   async componentDidMount(){
     await this.processPatientReport();
     console.log(this.firebase.processAnExperiment(this.state.experiments[0]));
+    
+    //Create pc for doctor example..
+    this.firebase.createPcForDoctor("broadangle");
+    
+    //Get all pc example
+    // var a = await this.firebase.getAllPcForClinic();
+    // a.forEach(element => {
+    //   console.log(element.data());
+    // })
+    
+    //Set game adjustment example.
+    // this.firebase.setGameAdjustmentForPc({
+    //   lagaluga: "Lagalua",
+    //   asdıjqwd: "sadjd"
+    // }, "6PsbmwUM36XURb01iZbI");
   }
   
   render() {
