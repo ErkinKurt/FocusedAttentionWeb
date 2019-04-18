@@ -6,12 +6,12 @@ import 'react-widgets/dist/css/react-widgets.css';
 const CREATEPATIENTFORM_STATE = {
   'name': '',
   'age': '',
-  'value': 'select',
+  'value': 'Select',
   'email': '',
   'password': ''
 };
 
-let genders = ['select', 'male', 'female'];
+let genders = ['Select', 'Male', 'Female'];
 
 
 
