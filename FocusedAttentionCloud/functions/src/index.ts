@@ -38,3 +38,35 @@ export const createBlockForPatient = functions.https.onRequest((request, respons
 
 
 });
+
+export const getGameAdjustment = functions.https.onRequest((request, response) => {
+    console.log(request);
+    let idToken;
+
+    //Bearer verification..
+    if (request.headers.authorization && request.headers.authorization.startsWith('Bearer ')) {
+        idToken = request.headers.authorization.split('Bearer ')[1];
+    }
+    else {
+        response.status(403).send('Unauthorized');
+        return;
+    }
+    //idToken validation
+    admin.auth().verifyIdToken(idToken).then((decodedIdToken) => {
+        console.log(decodedIdToken);
+        const computerId = request.get('ComputerId');
+
+        admin.firestore().collection('Computers').doc(computerId).get()
+            .then(result => {
+                response.json(result.data());
+            })
+            .catch(error => {
+                console.log('error: ' + error);
+            })
+    }).catch((error) => {
+        console.error("Error while verifying Firebase Id Token: ", error);
+        response.status(403).send("Unauthorized");
+    })
+
+
+});
