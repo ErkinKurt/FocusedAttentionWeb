@@ -20,6 +20,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import {AuthUserContext} from '../Session';
+//import { FirebaseContext } from '../Firebase';
 
 class App extends Component {
   constructor(props){
@@ -30,26 +31,28 @@ class App extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount = async () => {
     this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
       authUser
         ? this.setState({authUser})
         : this.setState({authUser: null});
     });
+    //let user = this.props.firebase.auth.currentUser.uid;
+    //console.log(user);
   }
-
-  componentWillUnmount(){
+  componentWillUnmount = () =>{
     this.listener();
   }
 
   render() {
+    
     return (
       <AuthUserContext.Provider value={this.state.authUser}>
       <Router>
         <div>
         <Navigation />
           <hr />
-
+          {/* if(authUser.userType == "Admin") */}
           <Route exact path={ROUTES.LANDING} component={LandingPage}/>
           <Route path={ROUTES.SIGN_UP} component={SignUpPage}/>
           <Route path={ROUTES.SIGN_IN} component={SignInPage}/>

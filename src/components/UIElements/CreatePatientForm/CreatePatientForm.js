@@ -31,8 +31,9 @@ class CreatePatientForm extends Component {
 
   onSubmit = (event) => {
     let { name, age, value, email, password } = this.state;
+    // let userType = 'Patient';
     let patient = {
-      name, age, value, email, password,
+      name, age, value, email, password, // userType
     }
     this.props.firebase.createPatientForDoctor(patient);
     event.preventDefault();

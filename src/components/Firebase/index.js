@@ -19,6 +19,7 @@ export class Firebase {
 
     this.auth = app.auth();
     this.firestore = app.firestore();
+    //this.auth.currentUser.uid;
 
     //Crud app instantiation...
     this.crudApp = app.initializeApp(config, "crud");
@@ -124,7 +125,7 @@ export class Firebase {
     if (patient !== null && patient.email !== null && this.auth.currentUser !== null) {
       var doctorId = this.auth.currentUser.uid;
       var patientEmail = patient.email;
-      this.crudAuth.createUserWithEmailAndPassword(patientEmail, this.password)
+      this.crudAuth.createUserWithEmailAndPassword(patientEmail, patient.password)
         .then(() => {
           var patientId = this.crudAuth.currentUser.uid;
           this.firestore.collection("Doctors").doc(doctorId).collection("Patients").doc(patientId)

@@ -1,13 +1,36 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import { FirebaseContext } from '../Firebase';
 import { SignOut } from '../SignOut';
 import { AuthUserContext } from '../Session';
 
+const NAVIGATION_STATE = {
+  isRedirectedToSignIn: false,
+}
+
+
 // Navigation, when a user signed in to system
 class NavigationAuth extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {...NAVIGATION_STATE};
+  }
+
+  redirectToSignIn = () => {
+    this.setState({
+      isRedirectedToSignIn: true
+    });
+  }
+
   render() {
+    let {isRedirectedToSignIn} = this.state;
+    if (isRedirectedToSignIn) {
+      return(
+        <Redirect to={ROUTES.SIGN_IN} />
+      )
+    }
     return (
       <ul className='navbar-ul'>
         <li className="navbar-li">
@@ -30,7 +53,7 @@ class NavigationAuth extends Component {
         </li>
         <li className="navbar-li">
           <FirebaseContext.Consumer>
-            {firebase => <SignOut firebase={firebase} />}
+            {firebase => <SignOut firebase={firebase} onClick={this.redirectToSignIn}/>}
           </FirebaseContext.Consumer>
         </li>
       </ul>

@@ -7,7 +7,7 @@ export default class CreatePatient extends Component {
     return (
         <FirebaseContext.Consumer>
          {firebase => <CreatePatientForm firebase={firebase} />}
-       </FirebaseContext.Consumer>
+        </FirebaseContext.Consumer>
     )
   }
 }
