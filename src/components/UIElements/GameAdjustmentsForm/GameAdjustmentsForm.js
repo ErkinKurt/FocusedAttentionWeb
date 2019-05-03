@@ -7,6 +7,7 @@ const GAMEADJUSTMENTFORM_STATE = {
   'gameScenarioId': 'Select',
   'patientsState': [],
   'patientId': 'Select',
+  'patientName': 'Select',
   'pcState': [],
   'pcId': 'Select',
   'startLevel': 'Select',
@@ -76,8 +77,8 @@ class GameAdjustmentsForm extends Component {
   }
 
   onSubmit = async (event) => {
-    let { pcId, patientId, gameScenarioId, startLevel, minLevel, maxLevel } = this.state;
-    let gameAdjustmentObj = { patientId, gameScenarioId, startLevel, minLevel, maxLevel }
+    let { pcId, patientId, patientName, gameScenarioId, startLevel, minLevel, maxLevel } = this.state;
+    let gameAdjustmentObj = { patientId, patientName, gameScenarioId, startLevel, minLevel, maxLevel }
     await this.firebase.setGameAdjustmentForPc(gameAdjustmentObj, pcId);
     event.preventDefault();
   }
@@ -144,7 +145,7 @@ class GameAdjustmentsForm extends Component {
                 <MDBIcon style = {{fontSize: "30px", paddingRight: "10px"}} far icon="id-card" />
                 <label style={{paddingRight: "10px"}}>Patient</label>
                 <Combobox onSelect = {patientId => this.setState({patientId})}
-                onChange={patientsArray=>this.setState({patientId: patientsArray.id})} 
+                onChange={patientsArray=>this.setState({patientId: patientsArray.id, patientName: patientsArray.name})} 
                 valueField = 'id'
                 textField = 'name'
                 value={patientId} data={patientsArray}  />
