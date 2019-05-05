@@ -144,7 +144,8 @@ export class Firebase {
 
   //Calculate Patient Statistics. In an experiment
 
-  getAllExperimentResults(){
+  getAllExperimentResults(experiments){
+    this.processAllExperiments(experiments);
     return this.ExperimentResults;
   }
 
@@ -194,12 +195,14 @@ export class Firebase {
   processAnExperiment(experiment){
     var experimentToPush = {
       experimentId: "",
+      experimentDate: Date,
       avgBlocks: [],
       avgResult: {}
     };
 
     var blockList = experiment.BlockList;
-    experimentToPush.experimentId = experiment.GameId;
+    experimentToPush.experimentId = experiment.GameScenario;
+    experimentToPush.experimentDate = experiment.ExperimentDate;
     blockList.forEach(block => {
       experimentToPush.avgBlocks.push(this.calculateAverageTrialValuesInBlock(block));
     });
