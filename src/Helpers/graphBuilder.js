@@ -1,6 +1,6 @@
 class GraphBuilder {
 
-    static dataSetBuilder(options, data){
+    static lineChartDataSetBuilder(options, data){
         var dataSet = {
           data: data,
           showLine: options.showLine,
@@ -27,24 +27,49 @@ class GraphBuilder {
       return dataSet;
     }
 
+    static radarChartDataSetBuilder(options, data){
+      var dataSet = {
+        label: options.label,
+        fill: options.fill === undefined ? true : false,
+        backgroundColor: options.color,
+        data: data
+      }
+      return dataSet;
+    }
+
+    //RadarChart for latest experiment..
+    //Design Choice... We can get all the experiments and show the latest one
+    //OR... we can get only the latest experiment.
+    static RadarChartBuilder(experiments){
+      var lastExperiment = experiments[experiments.length-1].avgResult;
+      let dataRadar = {};
+      var correctResponseDataSet = this.radarChartDataSetBuilder({color: "blue", label: "CorrectResponse"}, lastExperiment.avgCorrectResponse);
+      var conditionErrorDataSet = this.radarChartDataSetBuilder({color: "red",label: "Condition Error"},lastExperiment.avgConditionError);
+      var omissionErrorDataSet = this.radarChartDataSetBuilder({color: "red", label:"Omission Error"}, lastExperiment.avgOmissionError);
+      var responseTimeDataSet = this.radarChartDataSetBuilder({color: "black", label: "Response Time", fill: false}, lastExperiment.avgResponseTime);
+      dataRadar.datasets = [correctResponseDataSet, conditionErrorDataSet, omissionErrorDataSet, responseTimeDataSet];
+
+      return dataRadar;
+    }
+
     //LineChart builder with the given experiments.
     static LineChartBuilderByDate(experiments) {
       //If compare is empty create regular chart...
-      let dataLine = {}
+      let dataLine = {};
       //Labels by date... ASCENDING ORDER
       dataLine.labels = experiments.map(experiment => {
         return experiment.experimentDate.slice(0, 10);
       });
-      var correctResponseDataSet = this.dataSetBuilder({color: "blue", label: "Correct Response", showLine: true}, experiments.map(experiment => {
+      var correctResponseDataSet = this.lineChartDataSetBuilder({color: "blue", label: "Correct Response", showLine: true}, experiments.map(experiment => {
         return experiment.avgResult.avgCorrectResponse;
       }));
-      var conditionErrorDataSet = this.dataSetBuilder({color: "red", label: "Condition Error", showLine: true}, experiments.map(experiment => {
+      var conditionErrorDataSet = this.lineChartDataSetBuilder({color: "red", label: "Condition Error", showLine: true}, experiments.map(experiment => {
         return experiment.avgResult.avgConditionError;
       }));
-      var omissionErrorDataSet = this.dataSetBuilder({color:"green", label: "Omission Error", showLine: true}, experiments.map(experiment => {
+      var omissionErrorDataSet = this.lineChartDataSetBuilder({color:"green", label: "Omission Error", showLine: true}, experiments.map(experiment => {
         return experiment.avgResult.avgOmissionError;
       }));
-      var responseTimeDataSet = this.dataSetBuilder({color: "black", label: "Response Time", showLine: false}, experiments.map(experiment => {
+      var responseTimeDataSet = this.lineChartDataSetBuilder({color: "black", label: "Response Time", showLine: false}, experiments.map(experiment => {
         return experiment.avgResult.avgResponseTime;
       }));
       
