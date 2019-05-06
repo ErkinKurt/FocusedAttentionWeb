@@ -1,11 +1,27 @@
 import React, { Component } from 'react';
-import Utility from '../../../helper';
+import { Line } from "react-chartjs-2";
+import { MDBContainer } from "mdbreact";
+import Utility from '../../../Helpers/helper';
+import GraphBuilder from '../../../Helpers/graphBuilder';
+class ChartsPage extends React.Component {
+
+render() {
+    return (
+      <MDBContainer>
+        <h3 className="mt-5">{this.props.patientName}</h3>
+        <Line data={this.props.graphData} options={{ responsive: true }} />
+      </MDBContainer>
+    );
+  }
+}
+
 export default class PatientDashboard extends Component {
   
   constructor(props){
     super(props);
     this.firebase = this.props.firebase;
-    this.state = {experiments : [], patientId: "", experimentResults: []};
+    this.graphData = {};
+    this.state = {experiments : [], patientId: "", graphData: {}};
   };
 
   processPatientReport = async () => {
@@ -21,6 +37,9 @@ export default class PatientDashboard extends Component {
       });
     })
     Utility.sortExperimentsByDate(this.state.experiments);
+    this.setState({
+      graphData: GraphBuilder.LineChartBuilderByDate(this.state.experiments)
+    })
   }
 
   //Example codes below in componentDidMount. If you wanna use firebase get methods use in async function and when call happens to firebase;
@@ -30,42 +49,14 @@ export default class PatientDashboard extends Component {
     
   }
   
+  
   render() {
     return (
       <div>
         <h2>PatientDashboard</h2>
+        <ChartsPage patientName = {"Erkin Kurt"} graphData = {this.state.graphData}/>
       </div>
     )
   }
 }
 
-class ChartsPage extends React.Component {
-  state = {
-    dataLine: {
-      labels: ["January", "February", "March", "April", "May", "June", "July"],
-      datasets: [
-        {
-          label: "My First dataset",
-          fill: false,
-          lineTension: 0.1,
-          backgroundColor: "rgba(75,192,192,0.4)",
-          borderColor: "rgba(75,192,192,1)",
-          borderCapStyle: "butt",
-          borderDash: [],
-          borderDashOffset: 0.0,
-          borderJoinStyle: "miter",
-          pointBorderColor: "rgba(75,192,192,1)",
-          pointBackgroundColor: "#fff",
-          pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: "rgba(75,192,192,1)",
-          pointHoverBorderColor: "rgba(220,220,220,1)",
-          pointHoverBorderWidth: 2,
-          pointRadius: 1,
-          pointHitRadius: 10,
-          data: [65, 59, 80, 81, 56, 55, 40]
-        }
-      ]
-    }
-  }
-}
