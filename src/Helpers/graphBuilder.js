@@ -37,16 +37,40 @@ class GraphBuilder {
       return dataSet;
     }
 
+    static BarChartBuilder(experiments){
+      let dataBar = {};
+      var lastExperiment = experiments[experiments.length-1].avgResult;
+      dataBar.labels = ["Correct Response", "Condition Error", "Omission Error", "Response Time"];
+      dataBar.datasets = [{
+        label: "Last Experiment",
+        backgroundColor: ["blue","red","green","black"],
+        data: [lastExperiment.avgCorrectResponse, lastExperiment.avgConditionError, lastExperiment.avgOmissionError, lastExperiment.avgResponseTime]
+      }
+      ];
+      return dataBar;
+    }
+
     //RadarChart for latest experiment..
+    //Abi radarchart iptal... İstedigim seyi gösteremedim...
     //Design Choice... We can get all the experiments and show the latest one
     //OR... we can get only the latest experiment.
     static RadarChartBuilder(experiments){
-      var lastExperiment = experiments[experiments.length-1].avgResult;
       let dataRadar = {};
-      var correctResponseDataSet = this.radarChartDataSetBuilder({color: "blue", label: "CorrectResponse"}, lastExperiment.avgCorrectResponse);
-      var conditionErrorDataSet = this.radarChartDataSetBuilder({color: "red",label: "Condition Error"},lastExperiment.avgConditionError);
-      var omissionErrorDataSet = this.radarChartDataSetBuilder({color: "red", label:"Omission Error"}, lastExperiment.avgOmissionError);
-      var responseTimeDataSet = this.radarChartDataSetBuilder({color: "black", label: "Response Time", fill: false}, lastExperiment.avgResponseTime);
+      dataRadar.labels = experiments.map(experiment => {
+        return experiment.experimentDate.slice(0, 10);
+      });
+      var correctResponseDataSet = this.radarChartDataSetBuilder({color: "blue", label: "CorrectResponse"}, experiments.map(experiment => {
+        return experiment.avgResult.avgCorrectResponse;
+      }));
+      var conditionErrorDataSet = this.radarChartDataSetBuilder({color: "red",label: "Condition Error"},experiments.map(experiment => {
+        return experiment.avgResult.avgConditionError;
+      }));
+      var omissionErrorDataSet = this.radarChartDataSetBuilder({color: "green", label:"Omission Error"}, experiments.map(experiment => {
+        return experiment.avgResult.avgOmissionError;
+      }));
+      var responseTimeDataSet = this.radarChartDataSetBuilder({color: "black", label: "Response Time", fill: false}, experiments.map(experiment => {
+        return experiment.avgResult.avgResponseTime;
+      }));
       dataRadar.datasets = [correctResponseDataSet, conditionErrorDataSet, omissionErrorDataSet, responseTimeDataSet];
 
       return dataRadar;

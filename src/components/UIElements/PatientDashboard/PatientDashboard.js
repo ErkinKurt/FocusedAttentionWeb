@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Line, Radar } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import Utility from '../../../Helpers/helper';
 import GraphBuilder from '../../../Helpers/graphBuilder';
@@ -10,7 +10,7 @@ class ChartsPage extends React.Component {
       <MDBContainer>
         <h3 className="mt-5">{this.props.patientName}</h3>
         <Line data={this.props.lineChartData} options={{ responsive: true }} />
-        <Radar data={this.props.radarChartData} options={{ responsive: true }} />
+        <Bar data={this.props.barChartData} options={{responsive: true}}></Bar>
       </MDBContainer>
     );
   }
@@ -22,7 +22,7 @@ export default class PatientDashboard extends Component {
     super(props);
     this.firebase = this.props.firebase;
     this.lineChartData = {};
-    this.state = { experiments: [], patientId: "", lineChartData: {}, radarChartData: {} };
+    this.state = { experiments: [], patientId: "", lineChartData: {}, barChartData: {} };
   };
 
   processPatientReport = async () => {
@@ -40,7 +40,7 @@ export default class PatientDashboard extends Component {
     Utility.sortExperimentsByDate(this.state.experiments);
     this.setState({
       lineChartData: GraphBuilder.LineChartBuilderByDate(this.state.experiments),
-      radarChartData: GraphBuilder.RadarChartBuilder(this.state.experiments)
+      barChartData: GraphBuilder.BarChartBuilder(this.state.experiments)
     });
   }
 
@@ -55,7 +55,7 @@ export default class PatientDashboard extends Component {
     return (
       <div>
         <h2>PatientDashboard</h2>
-        <ChartsPage patientName={"Erkin Kurt"} radarChartData={this.state.radarChartData} lineChartData={this.state.lineChartData} />
+        <ChartsPage patientName={"Erkin Kurt"} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} />
       </div>
     )
   }
