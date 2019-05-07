@@ -17,6 +17,10 @@ class CreateDoctorForm extends Component {
       startDate: date
     });
   }
+
+  onChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  }
   
   render() {
     return (
@@ -62,7 +66,7 @@ class CreateDoctorForm extends Component {
                 <MDBInput
                   label="Password"
                   name='password'
-                  value='{password}'
+                  //value='{password}'
                   icon="lock"
                   group
                   type="password"

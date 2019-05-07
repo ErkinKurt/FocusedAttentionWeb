@@ -56,9 +56,9 @@ export class Firebase {
     this.firestore.collection("Computers").doc(pcId).update({
       GameAdjustment: gameAdjustmentObject
     }).then((success) => {
-      console.log("Game adjustment successfully updated." + success);
+      alert("Game adjustment successfully updated." + success);
     }).catch((error) => {
-      console.log("Error during updating GameAdjustment" + error);
+      alert("Error during updating GameAdjustment" + error);
     })
   }
 
@@ -131,11 +131,12 @@ export class Firebase {
           this.firestore.collection("Doctors").doc(doctorId).collection("Patients").doc(patientId)
             .set(patient)
             .then(resolve => {
-              console.log(resolve);
+              alert("New patient is created")
+              //alert(resolve);
               this.crudAuth.signOut();
             })
-            .catch(error => console.log("Error on adding patient to db." + error))
-        }).catch(error => console.log("Error on creating patient." + error))
+            .catch(error => alert("Error on adding patient to db." + error))
+        }).catch(error => alert("Error on creating patient." + error))
     }
     else {
       console.log("No patient passed during create patient method.");
@@ -144,7 +145,8 @@ export class Firebase {
 
   //Calculate Patient Statistics. In an experiment
 
-  getAllExperimentResults(){
+  getAllExperimentResults(experiments){
+    this.processAllExperiments(experiments);
     return this.ExperimentResults;
   }
 
@@ -194,12 +196,14 @@ export class Firebase {
   processAnExperiment(experiment){
     var experimentToPush = {
       experimentId: "",
+      experimentDate: Date,
       avgBlocks: [],
       avgResult: {}
     };
 
     var blockList = experiment.BlockList;
-    experimentToPush.experimentId = experiment.GameId;
+    experimentToPush.experimentId = experiment.GameScenario;
+    experimentToPush.experimentDate = experiment.ExperimentDate;
     blockList.forEach(block => {
       experimentToPush.avgBlocks.push(this.calculateAverageTrialValuesInBlock(block));
     });
