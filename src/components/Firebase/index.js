@@ -33,6 +33,18 @@ export class Firebase {
     this.ExperimentResults = [];
   }
 
+  //Firebase gg 
+  updateBlockForPatient(patientId, experimentId,  startIndex, endIndex){
+    var BlockList = [];
+    this.firestore.collection("Patients").doc(patientId).collection("Experiments").doc(experimentId).get().then(snapshot => {
+      BlockList = snapshot.data().BlockList;
+    }).catch(error => {
+      console.log(error);
+    })
+    BlockList = BlockList.splice(startIndex, endIndex-startIndex);
+    console.log(BlockList);
+  }
+
   // *** Auth API ***
 
   doCreateUserWithEmailAndPassword = (email, password) =>

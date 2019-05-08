@@ -48,6 +48,7 @@ export default class PatientDashboard extends Component {
   // use await keyword to wait thread to finish its work. 
   async componentDidMount() {
     await this.processPatientReport();
+    // this.props.firebase.updateBlockForPatient() ;
   }
 
 
@@ -55,7 +56,7 @@ export default class PatientDashboard extends Component {
     return (
       <div>
         <h2>PatientDashboard</h2>
-        <ChartsPage patientName={"Erkin Kurt"} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} />
+        {/* <ChartsPage patientName={"Erkin Kurt"} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} /> */}
       </div>
     )
   }
