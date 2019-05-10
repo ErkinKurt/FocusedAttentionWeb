@@ -48,6 +48,8 @@ export default class PatientDashboard extends Component {
   // use await keyword to wait thread to finish its work. 
   async componentDidMount() {
     await this.processPatientReport();
+    //await this.props.firebase.deletePatientsWhichIsNotDoctors("3SBvlMGU3whzlNnRXgQdQXeeWH73");
+
     // this.props.firebase.updateBlockForPatient() ;
   }
 

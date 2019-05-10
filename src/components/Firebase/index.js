@@ -131,6 +131,16 @@ export class Firebase {
     return this.firestore.collection("Patients").doc(patientId).collection("Experiments").where("GameId", "==", gameScenario).get();
   }
 
+  //Delete...
+  deletePatientsWhichIsNotDoctors(patientId){
+    this.firestore.collection("Doctors").doc("SPzW2IZkaycPbVgr2OvXRTtk9b63").collection("Patients").doc(patientId).get().then(result => {
+      console.log(result);
+    }).catch(error =>{
+      console.log(error);
+    });
+    
+  }
+
   ///<summary>Create patients for authenticated doctor.</summary>
   ///<param name="patient" dataType="json"> Patient object.</param>
   createPatientForDoctor = (patient) => {
