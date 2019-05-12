@@ -19,6 +19,7 @@ class AdminDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {...ADMINDASHBOARD_STATE};
+    this.firebase = this.props.firebase;
   }
 
   onChange = (event) => {
@@ -47,6 +48,10 @@ class AdminDashboard extends Component {
     this.setState({
       deleteDoctor: true
     });
+  }
+
+  componentDidMount = async () => {
+    
   }
   
   render() {
@@ -221,7 +226,7 @@ class AdminDashboard extends Component {
           <MDBBtn color="elegant" onClick={this.redirectToCreatePCForm}>Create a PC</MDBBtn>
           <MDBBtn color="elegant" onClick={this.redirectToCreateDoctorForm}>Create a Doctor</MDBBtn>
           <hr />
-          <MDBDataTable striped bordered small data={data} />
+          <MDBDataTable responsive striped bordered small data={data} />
       </div>
     );
   }

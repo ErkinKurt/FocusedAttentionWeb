@@ -3,6 +3,7 @@ import { Line, Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import Utility from '../../../Helpers/helper';
 import GraphBuilder from '../../../Helpers/graphBuilder';
+import queryString from 'query-string'
 class ChartsPage extends React.Component {
 
   render() {
@@ -17,16 +18,21 @@ class ChartsPage extends React.Component {
 }
 
 export default class PatientDashboard extends Component {
-
   constructor(props) {
     super(props);
     this.firebase = this.props.firebase;
     this.lineChartData = {};
-    this.state = { experiments: [], patientId: "", lineChartData: {}, barChartData: {} };
+    this.state = { experiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
   };
 
   processPatientReport = async () => {
-    var patientId = "OtvW7LIfqCTwzaYERpkZPQ5XtW42";
+    // Dynamic Patient Id is a must, it will come from query string
+    let parsed = queryString.parse(window.location.search);
+    console.log(parsed.id);
+    var patientId = parsed.id;
+    this.setState({
+      patientName: parsed.name
+    })
     var currentExperiments = [];
     var firebasePromise = this.props.firebase.getAllExperimentsWithPatientId(patientId);
     await firebasePromise.then(snapshot => {
@@ -46,7 +52,7 @@ export default class PatientDashboard extends Component {
 
   //Example codes below in componentDidMount. If you wanna use firebase get methods use in async function and when call happens to firebase;
   // use await keyword to wait thread to finish its work. 
-  async componentDidMount() {
+  componentDidMount = async () => {
     await this.processPatientReport();
     // this.props.firebase.updateBlockForPatient() ;
   }
@@ -56,7 +62,7 @@ export default class PatientDashboard extends Component {
     return (
       <div>
         <h2>PatientDashboard</h2>
-        {/* <ChartsPage patientName={"Erkin Kurt"} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} /> */}
+          <ChartsPage patientName={this.state.patientName} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} />
       </div>
     )
   }

@@ -89,6 +89,11 @@ export class Firebase {
     });
   }
 
+  // Get All doctors from Firebase
+  getAllDoctors = () => {
+    return this.firestore.collection("Doctors").get();
+  }
+
   ///<summary>Create pc with authenticated user's alies.</summary>
   ///<param name="pcName" dataType="string"> Name of the pc.</param>
   createPcForDoctor = (pcName) => {

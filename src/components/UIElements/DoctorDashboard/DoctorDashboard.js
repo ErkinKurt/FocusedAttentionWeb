@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBBtn, MDBInput, MDBDataTable, MDBIcon, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
-import { Redirect, withRouter } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import queryString from 'query-string';
+import PatientDashboard from '../PatientDashboard/PatientDashboard';
 
 // Doctor -> Patient Name, Age, Gender, email, password
 
@@ -26,11 +28,16 @@ const defaultOptionForPatient = patientOptions[0];
 const DOCTORDASHBOARD_STATE = {
   'isRedirectedToCreatePatient': false,
   'isRedirectedToGameAdjustment': false,
+  'isRedirectedToDoctorDashboard': false,
   'modal2': false,
   'radio': 1,
   'startDate': new Date(),
   'endDate': new Date(),
-  'patientsState': []
+  'patientsState': [],
+  'patientIdsState': [],
+  'patientNamesState': [],
+  'queryString': '',
+
 }
 
 class DoctorDashboard extends Component {
@@ -54,14 +61,20 @@ class DoctorDashboard extends Component {
   showPatients =  async () => {
     var firebasePromise = this.props.firebase.getAllPatientsForDoctor();
     let patients = [];
+    let ids = [];
+    let names = [];
     if(firebasePromise !== null) {
       await firebasePromise.then(snapshot => {
         snapshot.forEach(element => {
           //console.log(element.data())
           patients.push(element.data())
+          ids.push(element.id);
+          names.push(element.data().name);
         });
         this.setState({
-          patientsState: patients
+          patientsState: patients,
+          patientIdsState: ids,
+          patientNamesState: names
         });
       });
     }
@@ -113,6 +126,16 @@ class DoctorDashboard extends Component {
     });
   }
 
+  redirectToDoctorDashboard = (patientId, patientName) => {
+    alert(patientId);
+    console.log(queryString.parse(patientId));
+    this.setState({
+      queryString: 'id='+patientId+'&name='+patientName,
+      isRedirectedToDoctorDashboard: true
+    });
+    
+  }
+ 
   componentDidMount = async () => { 
     await this.showPatients();
     console.log(this.state.patientsState);
@@ -120,8 +143,8 @@ class DoctorDashboard extends Component {
 
 
   render() {
-    let { isRedirectedToCreatePatient, isRedirectedToGameAdjustment, 
-      modal2, patientsState } = this.state;
+    let { isRedirectedToCreatePatient, isRedirectedToGameAdjustment, isRedirectedToDoctorDashboard,
+      modal2, patientsState, patientIdsState, patientNamesState } = this.state;
 
     if (isRedirectedToCreatePatient) {
       return (
@@ -133,6 +156,13 @@ class DoctorDashboard extends Component {
       return (
         <Redirect to={ROUTES.GAMEADJUSTMENT} />
       )
+    }
+
+    if (isRedirectedToDoctorDashboard) {
+      return(
+        <Redirect to={'patient/?'+this.state.queryString} />
+      )
+      // Redirect to doctor dashboard with corresponding uid
     }
 
     if (modal2) {
@@ -220,7 +250,8 @@ class DoctorDashboard extends Component {
         gender: gender[i],
         email: email[i],
         edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-        delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
+        delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>,
+        graph: <MDBBtn onClick={() => this.redirectToDoctorDashboard(patientIdsState[i], patientNamesState[i])} size="sm" outline color="green"><MDBIcon icon="chart-line"/></MDBBtn>
       })
     }
     
@@ -260,6 +291,11 @@ class DoctorDashboard extends Component {
           label: 'Delete',
           field: 'delete',
           width: 10
+        },
+        {
+          label: 'Graph',
+          field: 'graph',
+          width: 10
         }
       ],
 
@@ -291,7 +327,7 @@ class DoctorDashboard extends Component {
         <MDBBtn color="elegant" /*onClick={this.showPatients()}*/>Show Patients</MDBBtn>
         <hr />
         {/* Datatable */}
-        <MDBDataTable striped bordered small data={data} />
+        <MDBDataTable responsive striped bordered small data={data} />
       </div>
     )
   }
