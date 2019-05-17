@@ -22,7 +22,7 @@ export default class PatientDashboard extends Component {
     super(props);
     this.firebase = this.props.firebase;
     this.lineChartData = {};
-    this.state = { experiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
+    this.state = { experiments: [], blockExperiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
   };
 
   processPatientReport = async () => {
@@ -41,6 +41,7 @@ export default class PatientDashboard extends Component {
       });
       this.setState({
         experiments: this.firebase.getAllExperimentResults(currentExperiments),
+        blockExperiments: currentExperiments,
       });
     })
     Utility.sortExperimentsByDate(this.state.experiments);
@@ -50,12 +51,16 @@ export default class PatientDashboard extends Component {
     });
   }
 
+
   //Example codes below in componentDidMount. If you wanna use firebase get methods use in async function and when call happens to firebase;
   // use await keyword to wait thread to finish its work. 
   componentDidMount = async () => {
     await this.processPatientReport();
     //await this.props.firebase.deletePatientsWhichIsNotDoctors("3SBvlMGU3whzlNnRXgQdQXeeWH73");
-
+    this.state.blockExperiments.forEach(experiment => {
+       this.props.firebase.fillResultBlocksForDiffuclty(experiment);
+    })
+    
     // this.props.firebase.updateBlockForPatient() ;
   }
 

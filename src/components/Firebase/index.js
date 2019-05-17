@@ -35,6 +35,10 @@ export class Firebase {
     //Experiments...
     //Kod leş oldu. SOLID Principle ile gram alakası yok. Pu ak... Yetiştirmemiz lazım ama ... degil
     this.ExperimentResults = [];
+    this.resultBlocksForDifficulty = [];
+    for(var i = 0; i < 20; i++){
+      this.resultBlocksForDifficulty.push(new this.blockWithDifficulty(i));
+    }
   }
 
   updateBlockForPatient(patientId, experimentId, startIndex, endIndex) {
@@ -375,6 +379,47 @@ export class Firebase {
     );
 
     return experimentToPush;
+  }
+
+  blockWithDifficulty(blockDifficulty){
+    this.blockDifficulty =  blockDifficulty;
+    this.blockList = [];
+  }
+
+  fillResultBlocksForDiffuclty(experiment){
+    var blockList = experiment.BlockList;
+    this.resultBlocksForDifficulty.forEach(resultBlock => {
+      blockList.forEach(block => {
+        if(resultBlock.blockDifficulty === block.Difficulty){
+          resultBlock.blockList.push(block);
+        }
+      })
+    });
+    
+    console.log("calculateLevelBasedResult");
+
+    var calculatedResults = this.calculateLevelBasedResult();
+    return calculatedResults;
+  }
+
+  avgBlockResult(blockDifficulty, avgBlock){
+    this.blockDifficulty = blockDifficulty;
+    this.avgBlock = avgBlock;
+  }
+
+  calculateLevelBasedResult(){
+    var result;
+    var returnResult;
+    var avgBlockResultList = [];
+    this.resultBlocksForDifficulty.forEach(resultBlock => {
+      var a = [];
+      resultBlock.blockList.forEach(block => {
+        a.push(this.calculateAverageTrialValuesInBlock(block));
+      })
+      avgBlockResultList.push(new this.avgBlockResult(resultBlock.blockDifficulty, this.calculateAvgResultForExperiment(a)));
+      a = null;
+    });
+    return avgBlockResultList;
   }
 
   /**
