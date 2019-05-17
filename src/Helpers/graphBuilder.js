@@ -1,5 +1,14 @@
+/**
+ * Helper class for graph building layer.
+ */
 class GraphBuilder {
 
+    /**
+     * Creates the dataset for line chart.
+     * @param {JSON} options Dataset Options
+     * @param {Data[]} data Data from patient experiments.
+     * @returns {DataSet[]} Dataset with options array.
+     */
     static lineChartDataSetBuilder(options, data){
         var dataSet = {
           data: data,
@@ -27,6 +36,12 @@ class GraphBuilder {
       return dataSet;
     }
 
+    /**
+     * Creates the dataset for radar chart.
+     * @param {JSON} options DataSet Options
+     * @param {Data[]} data Data from patient experiments.
+     * @returns {DataSet[]} Dataset with options array.
+     */
     static radarChartDataSetBuilder(options, data){
       var dataSet = {
         label: options.label,
@@ -37,6 +52,11 @@ class GraphBuilder {
       return dataSet;
     }
 
+    /**
+     * Creates the bar chart.
+     * @param {Data[]} data Data from patient experiments.
+     * @returns {JSON} Barchart..
+     */
     static BarChartBuilder(experiments){
       let dataBar = {};
       var lastExperiment = experiments[experiments.length-1].avgResult;
@@ -54,6 +74,11 @@ class GraphBuilder {
     //Abi radarchart iptal... İstedigim seyi gösteremedim...
     //Design Choice... We can get all the experiments and show the latest one
     //OR... we can get only the latest experiment.
+    /**
+     * Creates radar chart withthe given experiments.
+     * @param {Experiments[]} experiments 
+     * @returns {JSON} RadarChart
+     */
     static RadarChartBuilder(experiments){
       let dataRadar = {};
       dataRadar.labels = experiments.map(experiment => {
@@ -77,6 +102,11 @@ class GraphBuilder {
     }
 
     //LineChart builder with the given experiments.
+    /**
+     * LineChart builder with the given experiments.
+     * @param {Experiments[]} experiments 
+     * @returns {JSON} LineChart
+     */
     static LineChartBuilderByDate(experiments) {
       //If compare is empty create regular chart...
       let dataLine = {};
