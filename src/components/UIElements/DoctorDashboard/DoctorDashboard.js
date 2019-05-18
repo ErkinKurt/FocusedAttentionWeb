@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { MDBContainer, MDBBtn, MDBInput, MDBDataTable, MDBIcon, MDBModal, MDBModalBody, MDBModalHeader, MDBModalFooter } from 'mdbreact';
-import { Route, Redirect, withRouter } from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import queryString from 'query-string';
-import PatientDashboard from '../PatientDashboard/PatientDashboard';
 
 // Doctor -> Patient Name, Age, Gender, email, password
 
@@ -321,10 +320,11 @@ class DoctorDashboard extends Component {
                 based or scenario based reports */}
         <MDBBtn color="elegant" onClick={this.toggle(2)}>Get Report</MDBBtn>
         {/* Send an email to himself/herself of some specific reports */}
-        <MDBBtn color="elegant">Email Report</MDBBtn>
-        {/* Redirect to datatable, in datatable, edit patient and show patient's results
-                Maybe it can be unnecessary we can show it at the beginning, when the page opens */}
-        <MDBBtn color="elegant" /*onClick={this.showPatients()}*/>Show Patients</MDBBtn>
+        
+        {/*<MDBBtn color="elegant">Email Report</MDBBtn>
+        /* Redirect to datatable, in datatable, edit patient and show patient's results
+                Maybe it can be unnecessary we can show it at the beginning, when the page opens */
+        /*<MDBBtn color="elegant" /*onClick={this.showPatients()}>Show Patients</MDBBtn> */}
         <hr />
         {/* Datatable */}
         <MDBDataTable responsive striped bordered small data={data} />

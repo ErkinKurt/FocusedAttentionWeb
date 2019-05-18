@@ -12,6 +12,7 @@ const ADMINDASHBOARD_STATE = {
   'isRedirectedToCreatePC': false,
   'isRedirectedToUpdateDoctorForm': false,
   'deleteDoctor': false,
+  'doctorsState': [],
 }
 
 class AdminDashboard extends Component {
@@ -50,13 +51,32 @@ class AdminDashboard extends Component {
     });
   }
 
+  showDoctors = async () => {
+    let firebasePromise = this.props.firebase.getAllDoctors();
+    let doctors = [];
+    if (firebasePromise !== null) {
+      await firebasePromise.then(snapshot => {
+        snapshot.forEach(element => {
+          doctors.push(element.data());
+        })
+      });
+      this.setState({
+        doctorsState: doctors
+      });
+    }
+    else {
+      return "Empty";
+    }
+  }
+
   componentDidMount = async () => {
-    
+    await this.showDoctors();
+    console.log(this.state.doctorsState);
   }
   
   render() {
     
-    let { isRedirectedToCreateDoctor, isRedirectedToCreatePC, isRedirectedToUpdateDoctorForm, deleteDoctor } = this.state;
+    let { isRedirectedToCreateDoctor, isRedirectedToCreatePC, isRedirectedToUpdateDoctorForm, deleteDoctor, doctorsState } = this.state;
 
     if (isRedirectedToCreateDoctor) {
       return (
@@ -75,6 +95,27 @@ class AdminDashboard extends Component {
     }
     if (deleteDoctor) {
       console.log("Silme İşlemi");
+    }
+
+    let name = [];
+    let email = [];
+
+    doctorsState.forEach((item, index) => {
+      name[index] = item.name;
+      email[index] = item.email;
+    });
+
+    let doctorsArray = [];
+
+    for (let i=0; i<doctorsState.length; i++) {
+      doctorsArray.push({
+        name: name[i],
+        speciality: 'Doctor',
+        date: '2011/04/25',
+        email: email[i],
+        edit: <MDBBtn size="sm" outline color="primary" onClick = {this.redirectToUpdateDoctorForm}><MDBIcon icon="pencil-alt" /></MDBBtn>,
+        delete: <MDBBtn size="sm" outline color="danger" onClick = {this.deleteDoctor}><MDBIcon icon="user-times" /></MDBBtn>
+      })
     }
 
     const data = {
@@ -117,104 +158,7 @@ class AdminDashboard extends Component {
       ],
   
       // These are hard coded right now, but it will come from firebase
-      rows: [
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary" onClick = {this.redirectToUpdateDoctorForm}><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger" onClick = {this.deleteDoctor}><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Umutcan Berk Hasret',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'umutcanberkhasret@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Erkin Kurt',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'erkinkurt@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Hamza Melih Bayrakdar',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'hamza@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-        {
-          name: 'Ersoy Efe Uruk',
-          speciality: 'Doctor',
-          date: '2011/04/25',
-          email: 'efeuruk@gmail.com',
-          edit: <MDBBtn size="sm" outline color="primary"><MDBIcon icon="pencil-alt" /></MDBBtn>,
-          delete: <MDBBtn size="sm" outline color="danger"><MDBIcon icon="user-times" /></MDBBtn>
-        },
-      ]
+      rows: doctorsArray
     };
   
     return (

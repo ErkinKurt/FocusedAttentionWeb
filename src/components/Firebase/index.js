@@ -156,7 +156,8 @@ export class Firebase {
    * @returns {QuerySnapshot} Doctors
    */
   getAllDoctors = () => {
-    return this.firestore.collection("Doctors").get();
+    let doctors =  this.firestore.collection("Doctors").get();
+    return doctors;
   };
 
   ///<summary>Create pc with authenticated user's alies.</summary>
