@@ -135,19 +135,19 @@ class GraphBuilder {
       let dataLine = {};
       //Labels by date... ASCENDING ORDER
       dataLine.labels = experiments.map(experiment => {
-        return experiment.experimentDate.slice(0, 10);
+        return experiment.blockDifficulty;
       });
       var correctResponseDataSet = this.lineChartDataSetBuilder({color: "blue", label: "Correct Response", showLine: true}, experiments.map(experiment => {
-        return experiment.avgResult.avgCorrectResponse;
+        return experiment.avgBlock.avgCorrectResponse;
       }));
       var conditionErrorDataSet = this.lineChartDataSetBuilder({color: "red", label: "Condition Error", showLine: true}, experiments.map(experiment => {
-        return experiment.avgResult.avgConditionError;
+        return experiment.avgBlock.avgConditionError;
       }));
       var omissionErrorDataSet = this.lineChartDataSetBuilder({color:"green", label: "Omission Error", showLine: true}, experiments.map(experiment => {
-        return experiment.avgResult.avgOmissionError;
+        return experiment.avgBlock.avgOmissionError;
       }));
       var responseTimeDataSet = this.lineChartDataSetBuilder({color: "black", label: "Response Time", showLine: false}, experiments.map(experiment => {
-        return experiment.avgResult.avgResponseTime;
+        return experiment.avgBlock.avgResponseTime;
       }));
       
       dataLine.datasets = [correctResponseDataSet, conditionErrorDataSet, omissionErrorDataSet, responseTimeDataSet];

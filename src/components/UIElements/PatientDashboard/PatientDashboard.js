@@ -12,6 +12,7 @@ class ChartsPage extends React.Component {
         <h3 className="mt-5">{this.props.patientName}</h3>
         <Line data={this.props.lineChartData} options={{ responsive: true }} />
         <Bar data={this.props.barChartData} options={{responsive: true}}></Bar>
+        <Line data={this.props.lineChartDataByLevel} options={{ responsive: true }} />
       </MDBContainer>
     );
   }
@@ -22,7 +23,7 @@ export default class PatientDashboard extends Component {
     super(props);
     this.firebase = this.props.firebase;
     this.lineChartData = {};
-    this.state = { experiments: [], blockExperiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
+    this.state = { experiments: [], lineChartDataByLevel: [], blockExperiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
   };
 
   processPatientReport = async () => {
@@ -34,6 +35,7 @@ export default class PatientDashboard extends Component {
       patientName: parsed.name
     })
     var currentExperiments = [];
+    await this.firebase.getAllExperiments();
     var firebasePromise = this.props.firebase.getAllExperimentsWithPatientId(patientId);
     await firebasePromise.then(snapshot => {
       snapshot.forEach(element => {
@@ -49,29 +51,42 @@ export default class PatientDashboard extends Component {
       lineChartData: GraphBuilder.LineChartBuilderByDate(this.state.experiments),
       barChartData: GraphBuilder.BarChartBuilder(this.state.experiments)
     });
+    
+  }
+  processExperimentsByLevel() { 
+    this.state.blockExperiments.forEach(experiment => {
+      this.props.firebase.fillResultBlocksForDiffuclty(experiment);
+   })
+    this.setState({
+      blockExperiments: this.props.firebase.calculateLevelBasedResult()
+    });
   }
 
+  requestLineChartGraphByLevel(){
+    this.setState({
+      lineChartDataByLevel: GraphBuilder.LineChartBuilderByLevel(this.state.blockExperiments)
+    });
+  }
 
   //Example codes below in componentDidMount. If you wanna use firebase get methods use in async function and when call happens to firebase;
   // use await keyword to wait thread to finish its work. 
   componentDidMount = async () => {
     await this.processPatientReport();
     //await this.props.firebase.deletePatientsWhichIsNotDoctors("3SBvlMGU3whzlNnRXgQdQXeeWH73");
-    this.state.blockExperiments.forEach(experiment => {
-       this.props.firebase.fillResultBlocksForDiffuclty(experiment);
-    })
-    
     // this.props.firebase.updateBlockForPatient() ;
+    await this.processExperimentsByLevel();
+    this.requestLineChartGraphByLevel();
+    
   }
-
 
   render() {
     return (
       <div>
         <h2>PatientDashboard</h2>
-          <ChartsPage patientName={this.state.patientName} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} />
+          <ChartsPage patientName={this.state.patientName} lineChartDataByLevel={this.state.lineChartDataByLevel} barChartData={this.state.barChartData} lineChartData={this.state.lineChartData} />
       </div>
     )
+    
   }
 }
 

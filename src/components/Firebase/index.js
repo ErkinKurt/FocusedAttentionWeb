@@ -39,6 +39,7 @@ export class Firebase {
     for(var i = 0; i < 20; i++){
       this.resultBlocksForDifficulty.push(new this.blockWithDifficulty(i));
     }
+    this.allExperiments = [];
   }
 
   updateBlockForPatient(patientId, experimentId, startIndex, endIndex) {
@@ -223,6 +224,20 @@ export class Firebase {
       .get();
   };
 
+  async getAllExperiments(){
+    this.firestore.collection("Patients").get().then(QuerySnapshot => {
+      QuerySnapshot.docs.map(documentSnapshot => {
+        this.firestore.collection("Patients").doc(documentSnapshot.id).collection("Experiments").get().then(result => {
+          result.docs.map(documentS => {
+            this.firestore.collection("Patients").doc(documentSnapshot.id).collection("Experiments").doc(documentS.id).get().then(resultData => {
+              this.allExperiments.push(resultData.data());
+            })
+          })
+        })
+      })
+    });
+  }
+
   /**
    * Gets all experiments of the given patientId and gameScenario
    * @param {string} patientId 
@@ -397,10 +412,7 @@ export class Firebase {
       })
     });
     
-    console.log("calculateLevelBasedResult");
-
-    var calculatedResults = this.calculateLevelBasedResult();
-    return calculatedResults;
+    // console.log("calculateLevelBasedResult");
   }
 
   avgBlockResult(blockDifficulty, avgBlock){
@@ -409,8 +421,6 @@ export class Firebase {
   }
 
   calculateLevelBasedResult(){
-    var result;
-    var returnResult;
     var avgBlockResultList = [];
     this.resultBlocksForDifficulty.forEach(resultBlock => {
       var a = [];
