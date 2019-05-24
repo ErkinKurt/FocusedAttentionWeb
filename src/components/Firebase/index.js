@@ -24,7 +24,7 @@ export class Firebase {
     this.auth = app.auth();
     this.firestore = app.firestore();
     //this.auth.currentUser.uid;
-
+    
     //Crud app instantiation...
     this.crudApp = app.initializeApp(config, "crud");
 
@@ -40,6 +40,12 @@ export class Firebase {
       this.resultBlocksForDifficulty.push(new this.blockWithDifficulty(i));
     }
     this.allExperiments = [];
+  }
+
+  async getIdTokenOfCurrentUser(){
+    return this.auth.currentUser.getIdToken(true).then(idToken => {
+      return idToken;
+    });
   }
 
   updateBlockForPatient(patientId, experimentId, startIndex, endIndex) {
@@ -223,19 +229,35 @@ export class Firebase {
       .collection("Experiments")
       .get();
   };
-
-  async getAllExperiments(){
-    this.firestore.collection("Patients").get().then(QuerySnapshot => {
-      QuerySnapshot.docs.map(documentSnapshot => {
-        this.firestore.collection("Patients").doc(documentSnapshot.id).collection("Experiments").get().then(result => {
-          result.docs.map(documentS => {
-            this.firestore.collection("Patients").doc(documentSnapshot.id).collection("Experiments").doc(documentS.id).get().then(resultData => {
-              this.allExperiments.push(resultData.data());
-            })
-          })
+  
+  getAllExperiments(){
+    return this.firestore.collection("Patients").get()
+    .then(patientSnapshot => {
+      var promises = [];
+      patientSnapshot.docs.forEach(patientDoc => {
+        var p = this.firestore.collection(`Patients/${patientDoc.id}/Experiments`).get();
+        promises.push(p);
+      });
+      return Promise.all(promises); 
+    })
+    .then(experimentSnapshots => {
+      var promises = [];
+      experimentSnapshots.forEach(experimentSnapshot => {
+        experimentSnapshot.docs.forEach(expDoc => {
+          var p = this.firestore.doc(expDoc.ref.path).get();
+          promises.push(p);
         })
       })
-    });
+      return Promise.all(promises);
+    }).then(experimentDocSnapshots => {
+      var resultList = [];
+      experimentDocSnapshots.forEach(expDoc => {
+        resultList.push(expDoc.data());
+      })
+      return Promise.resolve(resultList);
+    }).catch(error => {
+      console.log(error);
+    })
   }
 
   /**
@@ -405,11 +427,13 @@ export class Firebase {
   fillResultBlocksForDiffuclty(experiment){
     var blockList = experiment.BlockList;
     this.resultBlocksForDifficulty.forEach(resultBlock => {
-      blockList.forEach(block => {
-        if(resultBlock.blockDifficulty === block.Difficulty){
-          resultBlock.blockList.push(block);
-        }
-      })
+      if(blockList!==null){
+        blockList.forEach(block => {
+          if(resultBlock.blockDifficulty === block.Difficulty){
+            resultBlock.blockList.push(block);
+          }
+        })
+      }
     });
     
     // console.log("calculateLevelBasedResult");
@@ -466,41 +490,6 @@ export class Firebase {
         avgTrial.OmissionError.push(0);
       }
     });
-    console.log(
-      "Block Id: " +
-        block.BlockId +
-        "ConditionError: mean: " +
-        stats.mean(avgTrial.ConditionError) +
-        "sd: " +
-        stats.stdev(avgTrial.ConditionError)
-    );
-    console.log(
-      "Block Id: " +
-        block.BlockId +
-        "CorrectResponse: mean: " +
-        stats.mean(avgTrial.CorrectResponse) +
-        "sd: " +
-        stats.stdev(avgTrial.CorrectResponse)
-    );
-    console.log(
-      "Block Id: " +
-        block.BlockId +
-        "OmissionError: mean: " +
-        stats.mean(avgTrial.OmissionError) +
-        "sd: " +
-        stats.stdev(avgTrial.OmissionError)
-    );
-    console.log(
-      "Block Id: " +
-        block.BlockId +
-        "ResponseTime: mean: " +
-        stats.mean(avgTrial.ResponseTime) +
-        "sd: " +
-        stats.stdev(avgTrial.ResponseTime)
-    );
-    console.log(
-      "------------------------------------------------------------------------------------------------"
-    );
     result.blockId = block.BlockId;
     result.avgConditionError = stats.mean(avgTrial.ConditionError);
     result.sdConditionError = stats.stdev(avgTrial.ConditionError);

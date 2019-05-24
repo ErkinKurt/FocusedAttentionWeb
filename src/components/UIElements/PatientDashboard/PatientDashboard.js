@@ -10,8 +10,11 @@ class ChartsPage extends React.Component {
     return (
       <MDBContainer>
         <h3 className="mt-5">{this.props.patientName}</h3>
+        <h4>Average experiment results in date based graph:</h4>
         <Line data={this.props.lineChartData} options={{ responsive: true }} />
+        <h4>Last experiment average results:</h4>
         <Bar data={this.props.barChartData} options={{responsive: true}}></Bar>
+        <h4>Level based response graph for all: </h4>
         <Line data={this.props.lineChartDataByLevel} options={{ responsive: true }} />
       </MDBContainer>
     );
@@ -26,6 +29,26 @@ export default class PatientDashboard extends Component {
     this.state = { experiments: [], lineChartDataByLevel: [], blockExperiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
   };
 
+  async getAllExperiments(){
+    var idToken = await this.firebase.getIdTokenOfCurrentUser();
+    console.log(idToken);
+    fetch("http://localhost:5000/focussed-attention/us-central1/getAllExperiments", 
+    {
+      method: 'get',
+      headers: new Headers({
+        'Authorization': 'Bearer ' + idToken,  
+        'Content-Type': 'application/json',
+      })
+    }
+    ).then(response => {
+      console.log("Response: ");
+      console.log(response);
+    }).catch(error => {
+      console.log("Error: ");
+      console.log(error);
+    })
+  }
+
   processPatientReport = async () => {
     // Dynamic Patient Id is a must, it will come from query string
     let parsed = queryString.parse(window.location.search);
@@ -35,15 +58,20 @@ export default class PatientDashboard extends Component {
       patientName: parsed.name
     })
     var currentExperiments = [];
-    await this.firebase.getAllExperiments();
+    
     var firebasePromise = this.props.firebase.getAllExperimentsWithPatientId(patientId);
+    await this.firebase.getAllExperiments()
+    .then(res => {
+      this.setState({
+        blockExperiments: res
+      })
+    });
     await firebasePromise.then(snapshot => {
       snapshot.forEach(element => {
         currentExperiments.push(element.data());
       });
       this.setState({
         experiments: this.firebase.getAllExperimentResults(currentExperiments),
-        blockExperiments: currentExperiments,
       });
     })
     Utility.sortExperimentsByDate(this.state.experiments);
@@ -54,6 +82,7 @@ export default class PatientDashboard extends Component {
     
   }
   processExperimentsByLevel() { 
+    console.log(this.state.blockExperiments);
     this.state.blockExperiments.forEach(experiment => {
       this.props.firebase.fillResultBlocksForDiffuclty(experiment);
    })
@@ -72,9 +101,8 @@ export default class PatientDashboard extends Component {
   // use await keyword to wait thread to finish its work. 
   componentDidMount = async () => {
     await this.processPatientReport();
-    //await this.props.firebase.deletePatientsWhichIsNotDoctors("3SBvlMGU3whzlNnRXgQdQXeeWH73");
-    // this.props.firebase.updateBlockForPatient() ;
-    await this.processExperimentsByLevel();
+    
+    this.processExperimentsByLevel();
     this.requestLineChartGraphByLevel();
     
   }
