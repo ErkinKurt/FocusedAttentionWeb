@@ -42,12 +42,6 @@ export class Firebase {
     this.allExperiments = [];
   }
 
-  async getIdTokenOfCurrentUser(){
-    return this.auth.currentUser.getIdToken(true).then(idToken => {
-      return idToken;
-    });
-  }
-
   updateBlockForPatient(patientId, experimentId, startIndex, endIndex) {
     var BlockList = [];
     this.firestore

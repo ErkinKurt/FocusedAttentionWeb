@@ -29,26 +29,6 @@ export default class PatientDashboard extends Component {
     this.state = { experiments: [], lineChartDataByLevel: [], blockExperiments: [], lineChartData: {}, barChartData: {}, patientName: '' };
   };
 
-  async getAllExperiments(){
-    var idToken = await this.firebase.getIdTokenOfCurrentUser();
-    console.log(idToken);
-    fetch("http://localhost:5000/focussed-attention/us-central1/getAllExperiments", 
-    {
-      method: 'get',
-      headers: new Headers({
-        'Authorization': 'Bearer ' + idToken,  
-        'Content-Type': 'application/json',
-      })
-    }
-    ).then(response => {
-      console.log("Response: ");
-      console.log(response);
-    }).catch(error => {
-      console.log("Error: ");
-      console.log(error);
-    })
-  }
-
   processPatientReport = async () => {
     // Dynamic Patient Id is a must, it will come from query string
     let parsed = queryString.parse(window.location.search);
@@ -101,7 +81,6 @@ export default class PatientDashboard extends Component {
   // use await keyword to wait thread to finish its work. 
   componentDidMount = async () => {
     await this.processPatientReport();
-    
     this.processExperimentsByLevel();
     this.requestLineChartGraphByLevel();
     
